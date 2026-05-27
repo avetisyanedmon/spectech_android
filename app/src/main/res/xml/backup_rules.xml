@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude encrypted secure storage from cloud backup; the key is bound
+         to the device's KeyStore and won't decrypt elsewhere. -->
+    <exclude domain="sharedpref" path="spectech_secure.xml" />
+</full-backup-content>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="garage_empty_title">Гараж пуст</string>
+    <string name="garage_empty_message">Добавьте технику, чтобы подавать ставки в объявлениях.</string>
+    <string name="garage_add">Добавить технику</string>
+
+    <string name="equipment_section_characteristics">Характеристики</string>
+    <string name="equipment_no_characteristics">Характеристики не указаны.</string>
+    <string name="equipment_section_additional">Дополнительное оборудование</string>
+    <string name="equipment_action_edit">Изменить</string>
+    <string name="equipment_action_delete">Удалить</string>
+    <string name="equipment_action_deposit">Обеспечительный платёж</string>
+    <string name="equipment_delete_confirm_title">Удалить технику?</string>
+    <string name="equipment_delete_confirm_message">Техника будет удалена из гаража. Если по ней активен залог — сначала верните его.</string>
+    <string name="equipment_delete_confirm">Удалить</string>
+    <string name="equipment_delete_cancel">Отмена</string>
+
+    <string name="add_equipment_title">Добавить технику</string>
+    <string name="edit_equipment_title">Изменить технику</string>
+    <string name="add_equipment_close">Закрыть</string>
+    <string name="add_equipment_submit">Сохранить</string>
+    <string name="edit_equipment_submit">Сохранить изменения</string>
+
+    <string name="equipment_field_category">Тип техники</string>
+    <string name="equipment_select_category">Выберите тип техники</string>
+    <string name="equipment_field_name">Название</string>
+    <string name="equipment_field_vin">VIN</string>
+    <string name="equipment_field_year">Год выпуска</string>
+    <string name="equipment_field_description">Описание (необязательно)</string>
+    <string name="equipment_field_additional">Доп. оборудование (необязательно)</string>
+    <string name="equipment_field_photos">Фотографии</string>
+    <string name="equipment_add_photo">Добавить</string>
+
+    <string name="deposit_paid">Залог оплачен</string>
+    <string name="deposit_pending">Залог в обработке</string>
+
+    <string name="deposit_title">Обеспечительный платёж</string>
+    <string name="deposit_close">Закрыть</string>
+    <string name="deposit_syncing">Проверяем статус оплаты…</string>
+
+    <string name="deposit_intro_title">Нужен для ставок</string>
+    <string name="deposit_intro_message">Исполнители вносят обеспечительный платёж по каждой единице техники до подачи ставок. Платёж возвращается при добросовестном удалении техники из гаража.</string>
+    <string name="deposit_history_failed">Предыдущая попытка не прошла. Попробуйте снова.</string>
+    <string name="deposit_history_refunded">Предыдущий залог был возвращён.</string>
+    <string name="deposit_history_forfeited">Предыдущий залог был удержан.</string>
+    <string name="deposit_history_unknown">Предыдущий залог закрыт.</string>
+
+    <string name="deposit_pending_headline">Оплата в процессе</string>
+    <string name="deposit_pending_message">Завершите оплату в YooKassa, чтобы активировать залог. Статус обновится, как только вы вернётесь в приложение.</string>
+
+    <string name="deposit_paid_headline">Залог активен</string>
+    <string name="deposit_paid_message">Теперь вы можете подавать ставки с этой техникой.</string>
+
+    <string name="deposit_refund_pending_headline">Возврат в обработке</string>
+    <string name="deposit_refund_pending_message">YooKassa обрабатывает возврат. Обычно это занимает несколько минут.</string>
+
+    <string name="deposit_action_pay">Оплатить залог</string>
+    <string name="deposit_action_continue">Продолжить оплату</string>
+    <string name="deposit_action_refund">Вернуть залог</string>
+
+    <string name="deposit_refund_confirm_title">Вернуть залог?</string>
+    <string name="deposit_refund_confirm_message">Вы потеряете возможность подавать ставки с этой техникой, пока не оплатите залог заново. Возврат пойдёт на способ оплаты в YooKassa.</string>
+    <string name="deposit_refund_confirm">Вернуть</string>
+    <string name="deposit_refund_cancel">Отмена</string>
+</resources>

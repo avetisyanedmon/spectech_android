@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">СпецТех</string>
+
+    <string name="restoring_session">Восстанавливаем сессию…</string>
+    <string name="logout">Выйти</string>
+
+    <string name="tab_marketplace">Объявления</string>
+    <string name="tab_my_bids">Мои ставки</string>
+    <string name="tab_my_orders">Мои заказы</string>
+    <string name="tab_garage">Гараж</string>
+    <string name="tab_news">Новости</string>
+
+    <string name="tab_title_marketplace">Активные заказы</string>
+    <string name="tab_title_my_bids">Мои ставки</string>
+    <string name="tab_title_my_orders">Мои заказы</string>
+    <string name="tab_title_garage">Гараж</string>
+    <string name="tab_title_news">Новости</string>
+
+    <string name="action_create_order">Создать заказ</string>
+    <string name="profile_title">Профиль</string>
+    <string name="support_title">Поддержка</string>
+    <string name="notifications_title">Уведомления</string>
+
+    <string name="placeholder_marketplace">Здесь появятся активные заказы.</string>
+    <string name="placeholder_my_bids">Здесь появятся ваши ставки.</string>
+    <string name="placeholder_my_orders">Здесь появятся созданные вами заказы.</string>
+    <string name="placeholder_garage">Здесь появится ваша техника.</string>
+    <string name="placeholder_news">Здесь появятся новости платформы.</string>
+    <string name="placeholder_notifications">Здесь будут показаны push-уведомления.</string>
+    <string name="placeholder_support">Форма поддержки появится в следующем релизе.</string>
+
+    <string name="signin_prompt_my_bids">Войдите, чтобы видеть и управлять своими ставками.</string>
+    <string name="signin_prompt_my_orders">Войдите, чтобы видеть созданные вами заказы.</string>
+    <string name="signin_prompt_garage">Войдите, чтобы управлять своей техникой.</string>
+    <string name="signin_prompt_profile">Войдите, чтобы просматривать и редактировать профиль.</string>
+    <string name="signin_prompt_notifications">Войдите, чтобы увидеть уведомления.</string>
+
+    <string name="profile_no_name">Без имени</string>
+    <string name="profile_phase_note">Полный профиль появится в следующем релизе.</string>
+</resources>

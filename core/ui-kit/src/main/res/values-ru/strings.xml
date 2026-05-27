@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="state_loading">Загрузка…</string>
+    <string name="state_retry">Повторить</string>
+    <string name="state_error_title">Что-то пошло не так</string>
+    <string name="state_action_call">Позвонить</string>
+    <string name="state_action_copy">Копировать номер</string>
+
+    <string name="sign_in">Войти</string>
+
+    <string name="status_open">Открыт</string>
+    <string name="status_pending">В ожидании</string>
+    <string name="status_accepted">Принят</string>
+    <string name="status_in_progress">В работе</string>
+    <string name="status_completed">Завершён</string>
+    <string name="status_cancelled">Отменён</string>
+    <string name="status_expired">Истёк срок</string>
+    <string name="status_closed">Закрыт</string>
+
+    <string name="unit_hour">за час</string>
+    <string name="unit_shift">за смену</string>
+    <string name="unit_m3">за м³</string>
+    <string name="unit_ton">за тонну</string>
+    <string name="unit_km">за км</string>
+    <string name="unit_ton_km">за т·км</string>
+    <string name="unit_m3_km">за м³·км</string>
+    <string name="unit_m2">за м²</string>
+    <string name="unit_linear_m">за погонный метр</string>
+
+    <string name="payment_cash">Наличные</string>
+    <string name="payment_nds">С НДС</string>
+    <string name="payment_usn">УСН</string>
+
+    <string name="cat_concrete_pump">Автобетононасос</string>
+    <string name="cat_aerial_platform">Автовышка</string>
+    <string name="cat_truck_crane">Автокран</string>
+    <string name="cat_sewage_vacuum">Ассенизатор-илосос</string>
+    <string name="cat_fuel_tanker">Бензовоз / Автоцистерна</string>
+    <string name="cat_concrete_mixer">Бетоновоз</string>
+    <string name="cat_bulldozer">Бульдозер</string>
+    <string name="cat_grader">Грейдер</string>
+    <string name="cat_grab_loader">Грейферный погрузчик</string>
+    <string name="cat_road_roller">Дорожный каток</string>
+    <string name="cat_soil_compactor">Грунтовый каток</string>
+    <string name="cat_asphalt_paver">Асфальтоукладчик</string>
+    <string name="cat_manipulator">Манипулятор</string>
+    <string name="cat_mini_loader">Мини-погрузчик</string>
+    <string name="cat_mini_excavator">Мини-экскаватор</string>
+    <string name="cat_garbage_truck">Мусоровоз / Бункеровоз</string>
+    <string name="cat_lowbed_trailer">Трал / Низкорамная платформа</string>
+    <string name="cat_dump_truck">Самосвал</string>
+    <string name="cat_front_loader">Фронтальный погрузчик</string>
+    <string name="cat_tow_truck">Эвакуатор / Автовоз</string>
+    <string name="cat_excavator_crawler">Экскаватор гусеничный</string>
+    <string name="cat_excavator_wheeled">Экскаватор колесный</string>
+    <string name="cat_auger_drill">Ямобур</string>
+    <string name="cat_backhoe_loader">Экскаватор-погрузчик</string>
+    <string name="cat_bitumen_sprayer">Гудронатор</string>
+    <string name="cat_forklift">Вилочный погрузчик</string>
+    <string name="cat_road_maintenance_vehicle">КДМ</string>
+</resources>

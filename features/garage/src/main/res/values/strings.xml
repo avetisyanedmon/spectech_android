@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Garage list -->
+    <string name="garage_empty_title">Empty garage</string>
+    <string name="garage_empty_message">Add equipment to start submitting bids on marketplace orders.</string>
+    <string name="garage_add">Add equipment</string>
+
+    <!-- Equipment detail -->
+    <string name="equipment_section_characteristics">Characteristics</string>
+    <string name="equipment_no_characteristics">No characteristics provided.</string>
+    <string name="equipment_section_additional">Additional equipment</string>
+    <string name="equipment_action_edit">Edit</string>
+    <string name="equipment_action_delete">Delete</string>
+    <string name="equipment_action_deposit">Performance deposit</string>
+    <string name="equipment_delete_confirm_title">Delete equipment?</string>
+    <string name="equipment_delete_confirm_message">This removes the unit from your garage. If a deposit is active you\'ll need to refund it first.</string>
+    <string name="equipment_delete_confirm">Delete</string>
+    <string name="equipment_delete_cancel">Cancel</string>
+
+    <!-- Add / Edit sheets -->
+    <string name="add_equipment_title">Add equipment</string>
+    <string name="edit_equipment_title">Edit equipment</string>
+    <string name="add_equipment_close">Close</string>
+    <string name="add_equipment_submit">Save</string>
+    <string name="edit_equipment_submit">Save changes</string>
+
+    <!-- Field labels -->
+    <string name="equipment_field_category">Equipment type</string>
+    <string name="equipment_select_category">Select an equipment type</string>
+    <string name="equipment_field_name">Name</string>
+    <string name="equipment_field_vin">VIN</string>
+    <string name="equipment_field_year">Year of manufacture</string>
+    <string name="equipment_field_description">Description (optional)</string>
+    <string name="equipment_field_additional">Additional equipment (optional)</string>
+    <string name="equipment_field_photos">Photos</string>
+    <string name="equipment_add_photo">Add</string>
+
+    <!-- Deposit badges (also referenced by EquipmentHeroImage) -->
+    <string name="deposit_paid">Deposit paid</string>
+    <string name="deposit_pending">Deposit pending</string>
+
+    <!-- Deposit sheet -->
+    <string name="deposit_title">Performance deposit</string>
+    <string name="deposit_close">Close</string>
+    <string name="deposit_syncing">Checking payment status…</string>
+
+    <!-- No active deposit / intro -->
+    <string name="deposit_intro_title">Required to bid</string>
+    <string name="deposit_intro_message">Contractors must post a performance deposit on each equipment unit before bidding. The deposit is refundable when you remove the unit in good standing.</string>
+    <string name="deposit_history_failed">Your previous attempt did not complete. Try again.</string>
+    <string name="deposit_history_refunded">The previous deposit was refunded.</string>
+    <string name="deposit_history_forfeited">The previous deposit was forfeited.</string>
+    <string name="deposit_history_unknown">Previous deposit closed.</string>
+
+    <!-- Pending -->
+    <string name="deposit_pending_headline">Payment in progress</string>
+    <string name="deposit_pending_message">Continue the YooKassa payment flow to activate the deposit. We\'ll refresh the status as soon as you return.</string>
+
+    <!-- Paid -->
+    <string name="deposit_paid_headline">Deposit active</string>
+    <string name="deposit_paid_message">You can now submit bids using this equipment.</string>
+
+    <!-- Refund pending -->
+    <string name="deposit_refund_pending_headline">Refund in progress</string>
+    <string name="deposit_refund_pending_message">YooKassa is processing the refund. This usually takes a few minutes.</string>
+
+    <!-- Actions -->
+    <string name="deposit_action_pay">Pay deposit</string>
+    <string name="deposit_action_continue">Continue payment</string>
+    <string name="deposit_action_refund">Refund deposit</string>
+
+    <!-- Refund confirmation -->
+    <string name="deposit_refund_confirm_title">Refund deposit?</string>
+    <string name="deposit_refund_confirm_message">You will lose the ability to bid with this equipment until you re-deposit. The refund goes back to your YooKassa payment method.</string>
+    <string name="deposit_refund_confirm">Refund</string>
+    <string name="deposit_refund_cancel">Cancel</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand palette ported from iOS Color(red: 0.25, green: 0.48, blue: 0.95). -->
+    <color name="brand_blue">#407AF2</color>
+    <color name="brand_blue_dark">#3464C6</color>
+    <color name="ic_launcher_background">#407AF2</color>
+</resources>

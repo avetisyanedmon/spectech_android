@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_order_title">Create order</string>
+    <string name="create_order_close">Close</string>
+    <string name="create_order_submit">Publish order</string>
+    <string name="create_order_ok">OK</string>
+    <string name="create_order_cancel">Cancel</string>
+
+    <!-- Sections -->
+    <string name="create_order_section_equipment">Equipment</string>
+    <string name="create_order_section_address">Address</string>
+    <string name="create_order_section_pricing">Pricing &amp; payment</string>
+    <string name="create_order_section_schedule">Schedule</string>
+    <string name="create_order_section_description">Description</string>
+
+    <!-- Fields -->
+    <string name="create_order_category">Equipment type</string>
+    <string name="create_order_region">Region</string>
+    <string name="create_order_city">City</string>
+    <string name="create_order_street">Street</string>
+    <string name="create_order_house_number">House number</string>
+    <string name="create_order_pricing_unit">Pricing unit</string>
+    <string name="create_order_work_volume">Work volume</string>
+    <string name="create_order_payment">Payment</string>
+    <string name="create_order_start_date">Start date</string>
+    <string name="create_order_start_time">Start time</string>
+    <string name="create_order_bidding_deadline">Bidding deadline</string>
+    <string name="create_order_duration_hours">Duration (hours)</string>
+    <string name="create_order_description">Describe the job (optional)</string>
+
+    <!-- Picker labels used by date/time helpers -->
+    <string name="create_order_date">Date</string>
+    <string name="create_order_time">Time</string>
+</resources>

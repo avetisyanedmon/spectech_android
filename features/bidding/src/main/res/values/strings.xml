@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bid_title">Submit a bid</string>
+    <string name="bid_close">Close</string>
+    <string name="bid_submit">Submit bid</string>
+
+    <string name="bid_equipment_label">Equipment</string>
+    <string name="bid_select_equipment">Select equipment</string>
+    <string name="bid_price">Price</string>
+    <string name="bid_delivery_price">Delivery price</string>
+    <string name="bid_payment">Payment</string>
+    <string name="bid_comment">Comment (optional)</string>
+    <string name="bid_no_accepted_payments">The order has no accepted payment types.</string>
+
+    <!-- No-equipment-yet card -->
+    <string name="bid_no_equipment_title">No matching equipment</string>
+    <string name="bid_no_equipment_message">Add equipment of the same category in your Garage before bidding.</string>
+    <string name="bid_no_equipment_cta">Open Garage</string>
+
+    <!-- Error messages mapped from ApiError codes -->
+    <string name="bid_error_deposit_required">Pay the performance deposit on this equipment before bidding.</string>
+    <string name="bid_error_own_order">You can\'t bid on your own order.</string>
+    <string name="bid_error_invalid_price">Enter a valid price.</string>
+    <string name="bid_error_invalid_payment">Pick a payment type the order accepts.</string>
+</resources>

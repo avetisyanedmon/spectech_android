@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bid_title">Подать ставку</string>
+    <string name="bid_close">Закрыть</string>
+    <string name="bid_submit">Отправить ставку</string>
+
+    <string name="bid_equipment_label">Техника</string>
+    <string name="bid_select_equipment">Выберите технику</string>
+    <string name="bid_price">Цена</string>
+    <string name="bid_delivery_price">Стоимость доставки</string>
+    <string name="bid_payment">Оплата</string>
+    <string name="bid_comment">Комментарий (необязательно)</string>
+    <string name="bid_no_accepted_payments">Заказчик не указал доступных способов оплаты.</string>
+
+    <string name="bid_no_equipment_title">Нет подходящей техники</string>
+    <string name="bid_no_equipment_message">Добавьте технику нужной категории в Гараже, чтобы подать ставку.</string>
+    <string name="bid_no_equipment_cta">Открыть Гараж</string>
+
+    <string name="bid_error_deposit_required">Оплатите обеспечительный платёж по этой технике перед подачей ставки.</string>
+    <string name="bid_error_own_order">Нельзя подать ставку на свой же заказ.</string>
+    <string name="bid_error_invalid_price">Введите корректную цену.</string>
+    <string name="bid_error_invalid_payment">Выберите способ оплаты, который принимает заказчик.</string>
+</resources>

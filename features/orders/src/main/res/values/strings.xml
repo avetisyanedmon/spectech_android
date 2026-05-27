@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MyOrders list -->
+    <string name="my_orders_empty_title">No orders</string>
+    <string name="my_orders_empty_message">You haven\'t created any orders yet.</string>
+
+    <!-- MyBids list -->
+    <string name="my_bids_empty_title">No bids</string>
+    <string name="my_bids_empty_message">Place a bid from the marketplace to see it here.</string>
+
+    <!-- Bid statuses (list trailing text) -->
+    <string name="my_bid_status_pending">Pending</string>
+    <string name="my_bid_status_accepted">Accepted</string>
+    <string name="my_bid_status_rejected">Not selected</string>
+
+    <!-- Detail screen sections -->
+    <string name="detail_section_bids">Bids · %1$d</string>
+    <string name="detail_section_my_bid">My bid</string>
+    <string name="detail_bid_price">Price</string>
+    <string name="detail_bid_equipment">Equipment</string>
+    <string name="detail_bids_none">No bids yet.</string>
+
+    <!-- Accept-bid -->
+    <string name="accept_bid">Accept</string>
+    <string name="bid_status_accepted">Accepted</string>
+    <string name="reveal_contractor_contact">Bid accepted — contractor contact</string>
+
+    <!-- Withdraw-bid -->
+    <string name="withdraw_bid">Withdraw bid</string>
+    <string name="withdraw_bid_confirm_title">Withdraw bid?</string>
+    <string name="withdraw_bid_confirm_message">This will remove your bid from the order. You can submit a new one before bidding closes.</string>
+    <string name="withdraw_bid_confirm">Withdraw</string>
+    <string name="withdraw_bid_cancel">Cancel</string>
+
+    <!-- Customer contact reveal (contractor side) -->
+    <string name="reveal_customer_contact">Bid accepted — customer contact</string>
+</resources>

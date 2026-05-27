@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base theme: Material 3, no action bar (Compose owns the top bar). -->
+    <style name="Theme.SpecTech" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+    </style>
+
+    <!-- Splash screen theme; falls back to Theme.SpecTech once Compose is up. -->
+    <style name="Theme.SpecTech.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.SpecTech</item>
+    </style>
+</resources>

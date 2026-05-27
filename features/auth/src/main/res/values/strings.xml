@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Sign-in -->
+    <string name="auth_welcome_title">Welcome Back</string>
+    <string name="auth_welcome_subtitle">Sign in with your phone number</string>
+    <string name="auth_phone_label">Phone Number</string>
+    <string name="auth_send_otp">Send OTP</string>
+    <string name="auth_or">or</string>
+    <string name="auth_no_account_question">Don\'t have an account?</string>
+    <string name="auth_create_account">Create Account</string>
+    <string name="auth_back_to_home">Back to home</string>
+
+    <!-- Register -->
+    <string name="auth_register_title">Create Account</string>
+    <string name="auth_account_type">Account Type</string>
+    <string name="auth_account_individual">Individual</string>
+    <string name="auth_account_legal_entity">Legal Entity</string>
+    <string name="auth_role_label">I am</string>
+    <string name="auth_full_name">Full Name</string>
+    <string name="auth_email_optional">Email (optional)</string>
+    <string name="auth_city">City</string>
+    <string name="auth_already_have_account">Already have an account? Sign in</string>
+
+    <!-- Verify OTP -->
+    <string name="auth_enter_otp">Enter OTP</string>
+    <string name="auth_otp_sent_to">We\'ve sent a code to</string>
+    <string name="auth_resend_in">Resend code in</string>
+    <string name="auth_resend_code">Resend code</string>
+    <string name="auth_verify_continue">Verify &amp; Continue</string>
+    <string name="auth_otp_help">Didn\'t receive the code? Check your phone number or contact support.</string>
+
+    <!-- Roles (shared with profile when that lands) -->
+    <string name="role_customer">Customer</string>
+    <string name="role_contractor">Contractor</string>
+    <string name="role_admin">Administrator</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="marketplace_empty_title">Нет заказов</string>
+    <string name="marketplace_empty_message">Активных заказов пока нет.</string>
+    <string name="marketplace_empty_filtered">Под текущие фильтры ничего не подходит.</string>
+    <string name="marketplace_open_filters">Открыть фильтры</string>
+
+    <string name="detail_no_category">Техника</string>
+    <string name="detail_section_terms">Условия</string>
+    <string name="detail_pricing_unit">Единица оплаты</string>
+    <string name="detail_payment">Способ оплаты</string>
+    <string name="detail_work_volume">Объём работ</string>
+    <string name="detail_duration_hours">Длительность (часов)</string>
+    <string name="detail_description">Описание</string>
+    <string name="detail_section_bids">Ставки · %1$d</string>
+    <string name="detail_bids_summary_hint">Только заказчик видит отдельные ставки. Подайте свою, чтобы участвовать.</string>
+    <string name="detail_submit_bid">Подать ставку</string>
+
+    <string name="filters_title">Фильтры</string>
+    <string name="filters_section_category">Техника</string>
+    <string name="filters_section_pricing_unit">Единица оплаты</string>
+    <string name="filters_section_payment">Способ оплаты</string>
+    <string name="filters_apply">Применить</string>
+    <string name="filters_clear">Сбросить</string>
+</resources>

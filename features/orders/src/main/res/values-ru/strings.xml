@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_orders_empty_title">Нет заказов</string>
+    <string name="my_orders_empty_message">Вы пока не создали ни одного заказа.</string>
+
+    <string name="my_bids_empty_title">Нет ставок</string>
+    <string name="my_bids_empty_message">Подайте ставку из объявлений, чтобы она появилась здесь.</string>
+
+    <string name="my_bid_status_pending">В ожидании</string>
+    <string name="my_bid_status_accepted">Принята</string>
+    <string name="my_bid_status_rejected">Не выбрана</string>
+
+    <string name="detail_section_bids">Ставки · %1$d</string>
+    <string name="detail_section_my_bid">Моя ставка</string>
+    <string name="detail_bid_price">Цена</string>
+    <string name="detail_bid_equipment">Техника</string>
+    <string name="detail_bids_none">Ставок пока нет.</string>
+
+    <string name="accept_bid">Принять</string>
+    <string name="bid_status_accepted">Принята</string>
+    <string name="reveal_contractor_contact">Ставка принята — контакты исполнителя</string>
+
+    <string name="withdraw_bid">Отозвать ставку</string>
+    <string name="withdraw_bid_confirm_title">Отозвать ставку?</string>
+    <string name="withdraw_bid_confirm_message">Ваша ставка будет удалена. Вы сможете подать новую до окончания приёма.</string>
+    <string name="withdraw_bid_confirm">Отозвать</string>
+    <string name="withdraw_bid_cancel">Отмена</string>
+
+    <string name="reveal_customer_contact">Ставка принята — контакты заказчика</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpecTech</string>
+
+    <!-- Phase 2: session restore + logout -->
+    <string name="restoring_session">Restoring session…</string>
+    <string name="logout">Logout</string>
+
+    <!-- Phase 4: bottom-bar tab labels (short, fits under the icon) -->
+    <string name="tab_marketplace">Market</string>
+    <string name="tab_my_bids">My Bids</string>
+    <string name="tab_my_orders">My Orders</string>
+    <string name="tab_garage">Garage</string>
+    <string name="tab_news">News</string>
+
+    <!-- Phase 4: top-bar titles (longer / more descriptive) -->
+    <string name="tab_title_marketplace">Active orders</string>
+    <string name="tab_title_my_bids">My Bids</string>
+    <string name="tab_title_my_orders">My Orders</string>
+    <string name="tab_title_garage">Garage</string>
+    <string name="tab_title_news">News</string>
+
+    <!-- Phase 4: top-bar action labels -->
+    <string name="action_create_order">Create order</string>
+    <string name="profile_title">Profile</string>
+    <string name="support_title">Support</string>
+    <string name="notifications_title">Notifications</string>
+
+    <!-- Phase 4: tab placeholder copy (replaced as each feature lands) -->
+    <string name="placeholder_marketplace">Active marketplace orders will appear here.</string>
+    <string name="placeholder_my_bids">Your submitted bids will appear here.</string>
+    <string name="placeholder_my_orders">Orders you create will appear here.</string>
+    <string name="placeholder_garage">Equipment you add will appear here.</string>
+    <string name="placeholder_news">Platform updates will appear here.</string>
+    <string name="placeholder_notifications">Push notifications will be listed here.</string>
+    <string name="placeholder_support">A support form lands in a later release.</string>
+
+    <!-- Phase 4: sign-in prompts shown on auth-required tabs -->
+    <string name="signin_prompt_my_bids">Sign in to view and manage your bids.</string>
+    <string name="signin_prompt_my_orders">Sign in to view orders you created.</string>
+    <string name="signin_prompt_garage">Sign in to manage your equipment.</string>
+    <string name="signin_prompt_profile">Sign in to view and manage your profile.</string>
+    <string name="signin_prompt_notifications">Sign in to view your notifications.</string>
+
+    <!-- Profile placeholder -->
+    <string name="profile_no_name">Unnamed user</string>
+    <string name="profile_phase_note">Full profile lands in a later release.</string>
+</resources>

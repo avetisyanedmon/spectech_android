@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Marketplace list -->
+    <string name="marketplace_empty_title">No orders</string>
+    <string name="marketplace_empty_message">No active marketplace orders are available.</string>
+    <string name="marketplace_empty_filtered">No orders match the current filters.</string>
+    <string name="marketplace_open_filters">Open filters</string>
+
+    <!-- Order detail -->
+    <string name="detail_no_category">Equipment</string>
+    <string name="detail_section_terms">Terms</string>
+    <string name="detail_pricing_unit">Pricing unit</string>
+    <string name="detail_payment">Payment</string>
+    <string name="detail_work_volume">Work volume</string>
+    <string name="detail_duration_hours">Duration (hours)</string>
+    <string name="detail_description">Description</string>
+    <string name="detail_section_bids">Bids · %1$d</string>
+    <string name="detail_bids_summary_hint">Only the customer can see individual bids. Submit yours below to participate.</string>
+    <string name="detail_submit_bid">Submit a bid</string>
+
+    <!-- Filter sheet -->
+    <string name="filters_title">Filters</string>
+    <string name="filters_section_category">Equipment</string>
+    <string name="filters_section_pricing_unit">Pricing unit</string>
+    <string name="filters_section_payment">Payment</string>
+    <string name="filters_apply">Apply</string>
+    <string name="filters_clear">Clear all</string>
+</resources>

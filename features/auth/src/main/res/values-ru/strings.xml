@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_welcome_title">С возвращением</string>
+    <string name="auth_welcome_subtitle">Войдите по номеру телефона</string>
+    <string name="auth_phone_label">Номер телефона</string>
+    <string name="auth_send_otp">Отправить код</string>
+    <string name="auth_or">или</string>
+    <string name="auth_no_account_question">Нет аккаунта?</string>
+    <string name="auth_create_account">Создать аккаунт</string>
+    <string name="auth_back_to_home">На главную</string>
+
+    <string name="auth_register_title">Создать аккаунт</string>
+    <string name="auth_account_type">Тип аккаунта</string>
+    <string name="auth_account_individual">Физлицо</string>
+    <string name="auth_account_legal_entity">Юрлицо</string>
+    <string name="auth_role_label">Я</string>
+    <string name="auth_full_name">ФИО</string>
+    <string name="auth_email_optional">Email (необязательно)</string>
+    <string name="auth_city">Город</string>
+    <string name="auth_already_have_account">Уже есть аккаунт? Войти</string>
+
+    <string name="auth_enter_otp">Введите код</string>
+    <string name="auth_otp_sent_to">Код отправлен на номер</string>
+    <string name="auth_resend_in">Повторно через</string>
+    <string name="auth_resend_code">Отправить заново</string>
+    <string name="auth_verify_continue">Подтвердить</string>
+    <string name="auth_otp_help">Не пришёл код? Проверьте номер телефона или обратитесь в поддержку.</string>
+
+    <string name="role_customer">Заказчик</string>
+    <string name="role_contractor">Исполнитель</string>
+    <string name="role_admin">Администратор</string>
+</resources>

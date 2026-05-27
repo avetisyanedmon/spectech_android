@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_order_title">Создать заказ</string>
+    <string name="create_order_close">Закрыть</string>
+    <string name="create_order_submit">Опубликовать заказ</string>
+    <string name="create_order_ok">OK</string>
+    <string name="create_order_cancel">Отмена</string>
+
+    <string name="create_order_section_equipment">Техника</string>
+    <string name="create_order_section_address">Адрес</string>
+    <string name="create_order_section_pricing">Цена и оплата</string>
+    <string name="create_order_section_schedule">Расписание</string>
+    <string name="create_order_section_description">Описание</string>
+
+    <string name="create_order_category">Тип техники</string>
+    <string name="create_order_region">Регион</string>
+    <string name="create_order_city">Город</string>
+    <string name="create_order_street">Улица</string>
+    <string name="create_order_house_number">Дом</string>
+    <string name="create_order_pricing_unit">Единица оплаты</string>
+    <string name="create_order_work_volume">Объём работ</string>
+    <string name="create_order_payment">Оплата</string>
+    <string name="create_order_start_date">Дата начала</string>
+    <string name="create_order_start_time">Время начала</string>
+    <string name="create_order_bidding_deadline">Окончание приёма ставок</string>
+    <string name="create_order_duration_hours">Длительность (часов)</string>
+    <string name="create_order_description">Опишите задачу (необязательно)</string>
+
+    <string name="create_order_date">Дата</string>
+    <string name="create_order_time">Время</string>
+</resources>

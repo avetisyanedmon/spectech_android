@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Shared keys consumed by callers of state views. Each composable in this
+    module accepts strings as parameters (no implicit resource lookups), so
+    these keys are referenced as `com.spectech.uikit.R.string.…` from the
+    feature module that owns the screen.
+-->
+<resources>
+    <!-- State views -->
+    <string name="state_loading">Loading…</string>
+    <string name="state_retry">Retry</string>
+    <string name="state_error_title">Something went wrong</string>
+    <string name="state_action_call">Call</string>
+    <string name="state_action_copy">Copy phone</string>
+
+    <string name="sign_in">Sign in</string>
+
+    <!-- OrderStatus labels (matched by OrderStatus.titleKey). -->
+    <string name="status_open">Open</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_accepted">Accepted</string>
+    <string name="status_in_progress">In progress</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_cancelled">Cancelled</string>
+    <string name="status_expired">Expired</string>
+    <string name="status_closed">Closed</string>
+
+    <!-- PricingUnit labels (matched by PricingUnit.titleKey). -->
+    <string name="unit_hour">per hour</string>
+    <string name="unit_shift">per shift</string>
+    <string name="unit_m3">per m³</string>
+    <string name="unit_ton">per ton</string>
+    <string name="unit_km">per km</string>
+    <string name="unit_ton_km">per t·km</string>
+    <string name="unit_m3_km">per m³·km</string>
+    <string name="unit_m2">per m²</string>
+    <string name="unit_linear_m">per linear m</string>
+
+    <!-- PaymentType labels (matched by PaymentType.titleKey). -->
+    <string name="payment_cash">Cash</string>
+    <string name="payment_nds">VAT (NDS)</string>
+    <string name="payment_usn">USN</string>
+
+    <!-- EquipmentCategory labels (matched by EquipmentCategory.titleKey). 27 cases. -->
+    <string name="cat_concrete_pump">Concrete pump</string>
+    <string name="cat_aerial_platform">Aerial work platform</string>
+    <string name="cat_truck_crane">Truck crane</string>
+    <string name="cat_sewage_vacuum">Sewage / sludge vacuum</string>
+    <string name="cat_fuel_tanker">Fuel truck / tanker</string>
+    <string name="cat_concrete_mixer">Concrete mixer truck</string>
+    <string name="cat_bulldozer">Bulldozer</string>
+    <string name="cat_grader">Grader</string>
+    <string name="cat_grab_loader">Grab loader</string>
+    <string name="cat_road_roller">Road roller</string>
+    <string name="cat_soil_compactor">Soil compactor</string>
+    <string name="cat_asphalt_paver">Asphalt paver</string>
+    <string name="cat_manipulator">Manipulator crane</string>
+    <string name="cat_mini_loader">Mini loader</string>
+    <string name="cat_mini_excavator">Mini excavator</string>
+    <string name="cat_garbage_truck">Garbage / skip truck</string>
+    <string name="cat_lowbed_trailer">Lowbed trailer</string>
+    <string name="cat_dump_truck">Dump truck</string>
+    <string name="cat_front_loader">Front-end loader</string>
+    <string name="cat_tow_truck">Tow truck / carrier</string>
+    <string name="cat_excavator_crawler">Crawler excavator</string>
+    <string name="cat_excavator_wheeled">Wheeled excavator</string>
+    <string name="cat_auger_drill">Auger drill rig</string>
+    <string name="cat_backhoe_loader">Backhoe loader</string>
+    <string name="cat_bitumen_sprayer">Bitumen sprayer</string>
+    <string name="cat_forklift">Forklift</string>
+    <string name="cat_road_maintenance_vehicle">Road maintenance vehicle</string>
+</resources>
