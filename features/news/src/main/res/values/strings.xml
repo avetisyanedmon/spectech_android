@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news_title">News</string>
+    <string name="news_empty_title">News</string>
+    <string name="news_empty_message">No news yet.</string>
+    <string name="news_error_title">News</string>
+    <string name="news_error_message">Could not load news.</string>
+    <string name="news_retry">Retry</string>
+
+    <!-- Card UX -->
+    <string name="news_read_more">Read more</string>
+    <string name="news_show_less">Show less</string>
+    <string name="news_play_video">Play video</string>
+
+    <!-- Relative timestamps moved to core/ui-kit/strings.xml as `time_*`
+         (see core/ui-kit/.../strings/RelativeTime.kt). News reuses the
+         shared helper so plural forms stay consistent. -->
+</resources>

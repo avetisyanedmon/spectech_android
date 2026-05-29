@@ -30,6 +30,7 @@ object NetworkModule {
         clientId = config.clientId,
         clientSecret = config.clientSecret,
         sessionProvider = sessionProvider,
+        pinCertificates = config.pinCertificates,
     )
 
     @Provides

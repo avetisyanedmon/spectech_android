@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news_title">Новости</string>
+    <string name="news_empty_title">Новости</string>
+    <string name="news_empty_message">Новостей пока нет.</string>
+    <string name="news_error_title">Новости</string>
+    <string name="news_error_message">Не удалось загрузить новости.</string>
+    <string name="news_retry">Повторить</string>
+
+    <string name="news_read_more">Читать далее</string>
+    <string name="news_show_less">Скрыть</string>
+    <string name="news_play_video">Воспроизвести видео</string>
+
+    <!-- Перенесено в core/ui-kit/strings.xml (`time_*`). -->
+</resources>

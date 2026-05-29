@@ -28,4 +28,42 @@
 
     <string name="create_order_date">Дата</string>
     <string name="create_order_time">Время</string>
+
+    <string name="create_order_street_optional">Улица (необязательно)</string>
+    <string name="create_order_house_number_optional">Дом (необязательно)</string>
+
+    <string name="create_order_additional_parameters">Дополнительные параметры</string>
+    <string name="create_order_optional">(необязательно)</string>
+
+    <string name="region_picker_title">Выберите регион</string>
+    <string name="region_picker_search_placeholder">Поиск региона</string>
+    <string name="region_picker_empty_title">Регионы не найдены</string>
+    <string name="region_picker_empty_message">Попробуйте другое написание.</string>
+
+    <string name="city_picker_title">Выберите город</string>
+    <string name="city_picker_search_placeholder">Поиск города</string>
+    <string name="city_picker_empty_title">Города не найдены</string>
+    <string name="city_picker_empty_message">Введите название города — оно будет сохранено как есть.</string>
+    <string name="city_picker_use_typed">Использовать «%1$s»</string>
+
+    <string name="opt_type">Тип</string>
+    <string name="opt_size">Размер</string>
+    <string name="opt_drum_type">Тип вальца</string>
+    <string name="opt_chassis">Ходовая</string>
+    <string name="opt_attachments">Дополнительное оборудование</string>
+    <string name="opt_axle_configuration">Конфигурация осей</string>
+    <string name="opt_boom_length_m">Длина стрелы (м)</string>
+    <string name="opt_boom_reach_m">Вылет стрелы (м)</string>
+    <string name="opt_lift_capacity_t">Грузоподъёмность (т)</string>
+    <string name="opt_lift_capacity_max_15_t">Грузоподъёмность (до 15 т)</string>
+    <string name="opt_tonnage_t">Тоннаж (т)</string>
+    <string name="opt_tonnage_range_1_6_t">Тоннаж (1–6 т)</string>
+    <string name="opt_drilling_depth_m">Глубина бурения (м)</string>
+    <string name="opt_diameter_mm">Диаметр (мм)</string>
+    <string name="opt_tank_volume_m3">Объём цистерны (до 30 м³)</string>
+    <string name="opt_bucket_volume_m3">Объём ковша (м³)</string>
+    <string name="opt_bucket_width_cm">Ширина ковша (см)</string>
+    <string name="opt_inert_material_optional">Инертный материал (необязательно)</string>
+    <string name="opt_inert_material_placeholder">например, песок, щебень</string>
+    <string name="opt_inert_material_warning">Внимание: цена исполнителя будет включать доставку груза.</string>
 </resources>

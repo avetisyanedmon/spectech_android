@@ -34,4 +34,12 @@
 
     <!-- Customer contact reveal (contractor side) -->
     <string name="reveal_customer_contact">Bid accepted — customer contact</string>
+
+    <!-- MyBidCard (Section 8 inline-rich rewrite) -->
+    <string name="my_bid_order_id_label">ID:</string>
+    <string name="my_bid_copy_order_id">Copy order ID</string>
+    <string name="my_bid_my_price">My price</string>
+    <string name="my_bid_delivery">Delivery</string>
+    <string name="my_bid_customer_contacts">Customer Contacts</string>
+    <string name="my_bid_contact_pending">Contact info not yet available</string>
 </resources>

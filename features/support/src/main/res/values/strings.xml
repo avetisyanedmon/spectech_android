@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_sheet_title">Contact support</string>
+    <string name="support_sheet_subtitle">Tell us what\'s going on. We usually reply within a business day.</string>
+
+    <string name="support_field_order_id_optional">Order ID (optional)</string>
+    <string name="support_field_message">Your message</string>
+
+    <string name="support_send">Send</string>
+    <string name="support_close">Close</string>
+    <string name="support_done">Done</string>
+
+    <string name="support_error_send_failed">Failed to send message. Please try again.</string>
+
+    <string name="support_success_title">Message sent</string>
+    <string name="support_success_message">We\'ve received your message and will get back to you soon.</string>
+</resources>

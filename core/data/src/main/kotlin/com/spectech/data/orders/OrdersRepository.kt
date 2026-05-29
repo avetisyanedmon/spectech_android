@@ -9,6 +9,8 @@ import com.spectech.domain.model.CreateBidRequest
 import com.spectech.domain.model.CreateOrderRequest
 import com.spectech.domain.model.Order
 import com.spectech.domain.model.OrderFilters
+import com.spectech.network.endpoints.ContractorLookupPayload
+import com.spectech.network.endpoints.DeletedOrderId
 import com.spectech.network.endpoints.OrdersApi
 import com.spectech.network.http.ApiClient
 import javax.inject.Inject
@@ -89,6 +91,52 @@ class OrdersRepository @Inject constructor(
     suspend fun withdrawBid(orderId: String, bidId: String) {
         api.send<WithdrawnBidId>(OrdersApi.WithdrawBid(orderId, bidId))
         events.emit(DomainEvent.OrdersChanged)
+    }
+
+    /**
+     * Customer deletes their own order. Backend rejects with 409 if a bid has
+     * already been accepted. Subscribers refresh so the row disappears from
+     * marketplace and My Orders lists.
+     */
+    suspend fun deleteOrder(orderId: String) {
+        api.send<DeletedOrderId>(OrdersApi.DeleteOrder(orderId))
+        events.emit(DomainEvent.OrdersChanged)
+    }
+
+    /**
+     * Looks up a contractor's public profile by id. Used by order-detail when
+     * a bid has no embedded contractor block. Does not touch any cache — the
+     * caller decides whether to keep the result around.
+     */
+    suspend fun fetchContractor(id: String): ContractorLookupPayload =
+        api.send<ContractorLookupPayload>(OrdersApi.FetchContractor(id)).data
+
+    /**
+     * Refreshes a single order by id. The backend has no `GET /orders/{id}`,
+     * so we replay iOS' fallback: try the list endpoint across the scopes most
+     * likely to contain it (the contractor-side `pending` view first, then the
+     * customer-side `mine`, then the public `marketplace`) and return the first
+     * hit. Returns `null` if no scope yields a match — callers keep showing
+     * whatever stale snapshot they already have rather than wiping the screen.
+     *
+     * Mirrors `OrdersService.fetchOrder(id:)` in SpecTechIOS/Services/OrdersService.swift.
+     */
+    suspend fun fetchOrder(id: String): Order? {
+        val lowerId = id.lowercase()
+        val scopes = listOf(OrderScope.PENDING, OrderScope.MINE, OrderScope.MARKETPLACE)
+        for (scope in scopes) {
+            try {
+                val list = api.send<List<Order>>(
+                    OrdersApi.FetchOrders(scope = scope, limit = OrdersApi.DEFAULT_PAGE_SIZE, offset = 0),
+                ).data
+                list.firstOrNull { it.id.lowercase() == lowerId }?.let { return it }
+            } catch (_: Throwable) {
+                // 401 on a pending/mine scope when signed out is expected;
+                // marketplace fallback still works for unauthenticated users.
+                continue
+            }
+        }
+        return null
     }
 
     companion object {

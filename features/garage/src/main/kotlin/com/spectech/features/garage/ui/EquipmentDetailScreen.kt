@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -50,8 +54,11 @@ import com.spectech.features.garage.R
 import com.spectech.features.garage.deposit.DepositInfoSheet
 import com.spectech.features.garage.ui.components.EquipmentHeroImage
 import com.spectech.features.garage.viewmodel.GarageViewModel
+import com.spectech.uikit.components.EquipmentStatusBadge
+import com.spectech.domain.parsing.EquipmentCharacteristics
 import com.spectech.uikit.components.LoadingStateView
 import com.spectech.uikit.strings.label
+import com.spectech.uikit.strings.localizedMessage
 
 @Composable
 fun EquipmentDetailScreen(
@@ -86,7 +93,11 @@ fun EquipmentDetailScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        PhotoCarousel(photos = equipment.photos, depositStatus = equipment.depositStatus)
+        PhotoCarousel(
+            photos = equipment.photos,
+            depositStatus = equipment.depositStatus,
+            equipmentStatus = EquipmentCharacteristics.status(equipment.characteristics),
+        )
 
         HeaderCard(equipment)
         CharacteristicsCard(equipment)
@@ -135,7 +146,7 @@ fun EquipmentDetailScreen(
 
         viewModel.deleteError?.let { err ->
             Text(
-                text = err.message,
+                text = err.localizedMessage(),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -183,11 +194,31 @@ fun EquipmentDetailScreen(
 }
 
 @Composable
-private fun PhotoCarousel(photos: List<String>, depositStatus: com.spectech.domain.enums.DepositStatus?) {
+private fun PhotoCarousel(
+    photos: List<String>,
+    depositStatus: com.spectech.domain.enums.DepositStatus?,
+    equipmentStatus: com.spectech.domain.enums.EquipmentStatus?,
+) {
     if (photos.isEmpty()) {
         EquipmentHeroImage(
             photoUrl = null,
             depositStatus = depositStatus,
+            equipmentStatus = equipmentStatus,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.6f),
+        )
+        return
+    }
+    // Single photo: use the hero composable so the status / deposit pills
+    // overlay correctly. Multiple photos: keep the pager but show the status
+    // badge as a separate row below the header card instead of overlaying
+    // each pager page.
+    if (photos.size == 1) {
+        EquipmentHeroImage(
+            photoUrl = photos.first(),
+            depositStatus = depositStatus,
+            equipmentStatus = equipmentStatus,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.6f),
@@ -213,31 +244,7 @@ private fun PhotoCarousel(photos: List<String>, depositStatus: com.spectech.doma
 
 @Composable
 private fun HeaderCard(equipment: Equipment) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                text = equipment.name,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-            )
-            equipment.category?.let { cat ->
-                Text(
-                    text = cat.label(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun CharacteristicsCard(equipment: Equipment) {
+    val status = EquipmentCharacteristics.status(equipment.characteristics)
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -245,17 +252,99 @@ private fun CharacteristicsCard(equipment: Equipment) {
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = androidx.compose.ui.Alignment.Top,
+            ) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = equipment.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    equipment.category?.let { cat ->
+                        Text(
+                            text = cat.label(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                EquipmentStatusBadge(status = status)
+            }
+        }
+    }
+}
+
+/**
+ * Renders parsed VIN / City / Status as labeled icon rows. Mirrors iOS
+ * `EquipmentDetailView` lines 60-73 — replaces the previous raw-blob display
+ * so the user sees structured fields with icons instead of "VIN: 123 | City: Moscow | …".
+ *
+ * Falls back to showing the raw blob when the parser finds nothing — covers
+ * older records the form wrote in a different shape.
+ */
+@Composable
+private fun CharacteristicsCard(equipment: Equipment) {
+    val raw = equipment.characteristics
+    val vin = EquipmentCharacteristics.vin(raw)
+    val city = EquipmentCharacteristics.city(raw)
+    val statusText = EquipmentCharacteristics.field(raw, EquipmentCharacteristics.KEY_STATUS)
+    val anyParsed = vin != null || city != null || statusText != null
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
                 text = stringResource(R.string.equipment_section_characteristics),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
-            Text(
-                text = equipment.characteristics.takeIf { it.isNotBlank() }
-                    ?: stringResource(R.string.equipment_no_characteristics),
-                style = MaterialTheme.typography.bodyMedium,
-            )
+
+            when {
+                anyParsed -> {
+                    vin?.let { CharacteristicRow(icon = Icons.Outlined.Numbers, value = it) }
+                    city?.let { CharacteristicRow(icon = Icons.Outlined.LocationOn, value = it) }
+                    statusText?.let { CharacteristicRow(icon = Icons.Outlined.Info, value = it) }
+                }
+                raw.isNotBlank() -> {
+                    // Older records that don't conform to the "K: V | …" shape.
+                    // Show the raw blob instead of dropping the data silently.
+                    Text(text = raw, style = MaterialTheme.typography.bodyMedium)
+                }
+                else -> {
+                    Text(
+                        text = stringResource(R.string.equipment_no_characteristics),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun CharacteristicRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    value: String,
+) {
+    Row(
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(18.dp),
+        )
+        Text(text = value, style = MaterialTheme.typography.bodyMedium)
     }
 }
 

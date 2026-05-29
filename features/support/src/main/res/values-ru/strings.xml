@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_sheet_title">Связаться с поддержкой</string>
+    <string name="support_sheet_subtitle">Расскажите, что произошло. Обычно отвечаем в течение рабочего дня.</string>
+
+    <string name="support_field_order_id_optional">ID заказа (необязательно)</string>
+    <string name="support_field_message">Ваше сообщение</string>
+
+    <string name="support_send">Отправить</string>
+    <string name="support_close">Закрыть</string>
+    <string name="support_done">Готово</string>
+
+    <string name="support_error_send_failed">Не удалось отправить сообщение. Попробуйте ещё раз.</string>
+
+    <string name="support_success_title">Сообщение отправлено</string>
+    <string name="support_success_message">Мы получили ваше сообщение и скоро ответим.</string>
+</resources>

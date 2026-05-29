@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.spectech.features.auth.R
 import com.spectech.features.auth.ui.components.OtpBoxes
 import com.spectech.features.auth.viewmodel.AuthFlowViewModel
+import com.spectech.uikit.strings.localizedMessage
 import kotlinx.coroutines.delay
 
 private const val CODE_LENGTH = 6
@@ -91,7 +92,7 @@ fun VerifyOtpScreen(
 
         viewModel.verifyError?.let { err ->
             Spacer(Modifier.height(12.dp))
-            Text(err.message, color = MaterialTheme.colorScheme.error,
+            Text(err.localizedMessage(), color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
         }
 

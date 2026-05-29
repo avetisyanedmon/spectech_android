@@ -31,4 +31,47 @@
     <!-- Picker labels used by date/time helpers -->
     <string name="create_order_date">Date</string>
     <string name="create_order_time">Time</string>
+
+    <!-- Section 6 additions: optional address parts -->
+    <string name="create_order_street_optional">Street (optional)</string>
+    <string name="create_order_house_number_optional">House number (optional)</string>
+
+    <!-- Category-specific optional parameters header -->
+    <string name="create_order_additional_parameters">Additional parameters</string>
+    <string name="create_order_optional">(optional)</string>
+
+    <!-- Region picker sheet -->
+    <string name="region_picker_title">Select region</string>
+    <string name="region_picker_search_placeholder">Search region</string>
+    <string name="region_picker_empty_title">No regions found</string>
+    <string name="region_picker_empty_message">Try a different spelling.</string>
+
+    <!-- City picker sheet -->
+    <string name="city_picker_title">Select city</string>
+    <string name="city_picker_search_placeholder">Search city</string>
+    <string name="city_picker_empty_title">No cities found</string>
+    <string name="city_picker_empty_message">Type a city name and we\'ll commit it as-is.</string>
+    <string name="city_picker_use_typed">Use “%1$s”</string>
+
+    <!-- Category-specific option field labels (iOS canonical) -->
+    <string name="opt_type">Type</string>
+    <string name="opt_size">Size</string>
+    <string name="opt_drum_type">Drum type</string>
+    <string name="opt_chassis">Chassis</string>
+    <string name="opt_attachments">Attachments</string>
+    <string name="opt_axle_configuration">Axle configuration</string>
+    <string name="opt_boom_length_m">Boom length (m)</string>
+    <string name="opt_boom_reach_m">Boom reach (m)</string>
+    <string name="opt_lift_capacity_t">Lift capacity (t)</string>
+    <string name="opt_lift_capacity_max_15_t">Lift capacity (up to 15 t)</string>
+    <string name="opt_tonnage_t">Tonnage (t)</string>
+    <string name="opt_tonnage_range_1_6_t">Tonnage (1–6 t)</string>
+    <string name="opt_drilling_depth_m">Drilling depth (m)</string>
+    <string name="opt_diameter_mm">Diameter (mm)</string>
+    <string name="opt_tank_volume_m3">Tank volume (up to 30 m³)</string>
+    <string name="opt_bucket_volume_m3">Bucket volume (m³)</string>
+    <string name="opt_bucket_width_cm">Bucket width (cm)</string>
+    <string name="opt_inert_material_optional">Inert material (optional)</string>
+    <string name="opt_inert_material_placeholder">e.g. sand, gravel</string>
+    <string name="opt_inert_material_warning">Warning: contractor pricing will include delivery of the load.</string>
 </resources>

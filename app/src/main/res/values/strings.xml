@@ -31,9 +31,7 @@
     <string name="placeholder_my_bids">Your submitted bids will appear here.</string>
     <string name="placeholder_my_orders">Orders you create will appear here.</string>
     <string name="placeholder_garage">Equipment you add will appear here.</string>
-    <string name="placeholder_news">Platform updates will appear here.</string>
     <string name="placeholder_notifications">Push notifications will be listed here.</string>
-    <string name="placeholder_support">A support form lands in a later release.</string>
 
     <!-- Phase 4: sign-in prompts shown on auth-required tabs -->
     <string name="signin_prompt_my_bids">Sign in to view and manage your bids.</string>
@@ -45,4 +43,13 @@
     <!-- Profile placeholder -->
     <string name="profile_no_name">Unnamed user</string>
     <string name="profile_phase_note">Full profile lands in a later release.</string>
+
+    <!-- Phase 11: in-app notifications inbox -->
+    <string name="notifications_empty">No notifications yet. Updates on your orders and bids will appear here.</string>
+    <string name="notifications_mark_all_read">Mark all read</string>
+    <string name="notifications_clear_all">Clear all</string>
+
+    <!-- Phase 11: push notification channel (visible in Android system settings) -->
+    <string name="notification_channel_default">Updates</string>
+    <string name="notification_channel_default_desc">Order, bid, and account updates.</string>
 </resources>

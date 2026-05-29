@@ -23,8 +23,30 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.AttributeKey
 import io.ktor.util.appendIfNameAbsent
 import java.io.IOException
+import okhttp3.CertificatePinner
 
 private val REQUIRES_AUTH = AttributeKey<Boolean>("RequiresAuth")
+
+/**
+ * Production host whose TLS chain we pin against MITM. Matches iOS
+ * `APIClient.pinnedHost`. Pinning is gated by the [AppConfiguration.pinCertificates]
+ * flag so debug builds running through Charles/mitmproxy can opt out.
+ */
+private const val PINNED_HOST = "spectech-backoffice.onrender.com"
+
+/**
+ * SHA-256 of the DER-encoded intermediate CA certificates in Render's chain.
+ * Mirrors `APIClient.pinnedCertHashes` in
+ * SpecTechIOS/Networking/API/APIClient.swift exactly so both platforms accept
+ * (and reject) the same set of server certificates.
+ *
+ * Intermediates are pinned (not the leaf) so pins survive leaf certificate
+ * rotation. Refresh both lists in lockstep when GTS rotates intermediates.
+ */
+private val PINNED_SHA256_BASE64 = listOf(
+    "HfwWBfutNY2LyET3bRUgP6ycpcGnn9SFf/ryhk++v5Y=", // Google Trust Services WE1
+    "drJ7gKWAJ9w88dpo2sFwEO2TmX0LYD4vrb6FASSTtac=", // GTS Root R4
+)
 
 /**
  * Public HTTP entry point. Constructed once by Hilt (see core/data NetworkModule).
@@ -81,6 +103,7 @@ fun buildHttpClient(
     clientSecret: String,
     sessionProvider: SessionProvider,
     enableLogging: Boolean = false,
+    pinCertificates: Boolean = false,
 ): HttpClient = HttpClient(OkHttp) {
     expectSuccess = false
 
@@ -89,6 +112,19 @@ fun buildHttpClient(
             connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             readTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
             addInterceptor(HmacInterceptor(clientId, clientSecret))
+
+            // Match iOS PinningDelegate: validate the server cert chain against
+            // the GTS intermediates whose SHA-256 fingerprints we ship in-app.
+            // OkHttp's pinner fails the TLS handshake on mismatch, mirroring
+            // iOS' `cancelAuthenticationChallenge` behaviour.
+            if (pinCertificates) {
+                val pinner = CertificatePinner.Builder().apply {
+                    PINNED_SHA256_BASE64.forEach { pin ->
+                        add(PINNED_HOST, "sha256/$pin")
+                    }
+                }.build()
+                certificatePinner(pinner)
+            }
         }
     }
 
@@ -114,7 +150,11 @@ fun buildHttpClient(
             if (!token.isNullOrEmpty()) {
                 request.headers.appendIfNameAbsent(HttpHeaders.Authorization, "Bearer $token")
             } else if (request.attributes.getOrNull(REQUIRES_AUTH) == true) {
-                throw ApiError(statusCode = 401, message = "Authentication required.")
+                throw ApiError(
+                    statusCode = 401,
+                    code = ApiError.LocalCodes.AUTH_REQUIRED,
+                    message = "Authentication required.",
+                )
             }
         }
     })

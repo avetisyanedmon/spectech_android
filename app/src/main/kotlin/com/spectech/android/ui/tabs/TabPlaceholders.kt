@@ -5,8 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AssignmentTurnedIn
 import androidx.compose.material.icons.outlined.ContentPasteSearch
 import androidx.compose.material.icons.outlined.Garage
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.spectech.android.R
@@ -14,27 +12,10 @@ import com.spectech.uikit.components.EmptyStateView
 import com.spectech.uikit.components.SignInPromptView
 
 /**
- * Tab content stubs. Each will be replaced by its feature module's nested
- * NavHost in the corresponding implementation phase.
- *
- *   MarketplaceTab  → Phase 5
- *   MyBidsTab       → Phase 7
- *   MyOrdersTab     → Phase 7
- *   GarageTab       → Phase 8
- *   NewsTab         → Phase 14
- *
- * Auth-required tabs render [SignInPromptView] when the user is anonymous.
+ * Tab content stubs for auth-required tabs that haven't been built out. Each
+ * shows a [SignInPromptView] when anonymous and a plain [EmptyStateView]
+ * when signed in (until the feature replaces the stub via its NavHost).
  */
-@Composable
-fun NewsTabPlaceholder(padding: PaddingValues) {
-    EmptyStateView(
-        title = stringResource(R.string.tab_title_news),
-        message = stringResource(R.string.placeholder_news),
-        icon = Icons.Outlined.Newspaper,
-        paddingValues = padding,
-    )
-}
-
 @Composable
 fun MyBidsTabPlaceholder(
     isAuthenticated: Boolean,

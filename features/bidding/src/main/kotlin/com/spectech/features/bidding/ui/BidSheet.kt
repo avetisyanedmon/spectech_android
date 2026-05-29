@@ -55,6 +55,7 @@ import com.spectech.domain.model.Order
 import com.spectech.features.bidding.R
 import com.spectech.features.bidding.viewmodel.BidSheetViewModel
 import com.spectech.uikit.strings.label
+import com.spectech.uikit.strings.localizedMessage
 
 /**
  * Bid Sheet shown over an order detail. Hosted at `:app` level so it can
@@ -233,7 +234,7 @@ private fun BidErrorBanner(error: com.spectech.domain.error.ApiError) {
             stringResource(R.string.bid_error_invalid_price)
         error.code == BidSheetViewModel.INVALID_PAYMENT_CODE ->
             stringResource(R.string.bid_error_invalid_payment)
-        else -> error.message
+        else -> error.localizedMessage()
     }
     Card(
         modifier = Modifier.fillMaxWidth(),

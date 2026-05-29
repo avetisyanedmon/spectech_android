@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Strings owned by :features:notifications. Empty-state copy mirrors
+        iOS `NotificationsView` `ContentUnavailableView` text — keep both
+        platforms wording-identical.
+    -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_close">Close</string>
+
+    <string name="notifications_empty_title">No notifications</string>
+    <string name="notifications_empty_message">Notifications you receive will appear here.</string>
+
+    <string name="notifications_mark_all_read">Mark all as read</string>
+    <string name="notifications_clear_all">Clear all</string>
+</resources>

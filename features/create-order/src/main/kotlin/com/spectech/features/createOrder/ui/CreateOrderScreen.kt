@@ -46,13 +46,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.spectech.features.createOrder.R
+import com.spectech.features.createOrder.ui.components.CategoryOptionsSection
 import com.spectech.features.createOrder.ui.components.CategoryPicker
+import com.spectech.features.createOrder.ui.components.CitySearchField
 import com.spectech.features.createOrder.ui.components.DateField
 import com.spectech.features.createOrder.ui.components.DateTimeField
 import com.spectech.features.createOrder.ui.components.PaymentTypeChips
 import com.spectech.features.createOrder.ui.components.PricingUnitPicker
+import com.spectech.features.createOrder.ui.components.RegionPickerField
 import com.spectech.features.createOrder.ui.components.TimeField
 import com.spectech.features.createOrder.viewmodel.CreateOrderViewModel
+import com.spectech.uikit.strings.localizedMessage
 
 /**
  * Modal sheet that hosts the Create Order form. Presented from the
@@ -125,34 +129,44 @@ private fun CreateOrderForm(viewModel: CreateOrderViewModel, onClose: () -> Unit
                     onValueChange = { viewModel.category = it },
                     label = stringResource(R.string.create_order_category),
                 )
+                // Per-category optional parameters (boom length, attachments,
+                // axle config, etc.) Mirrors iOS `CategoryOptionsSection` —
+                // hidden for categories that don't have any extra fields.
+                CategoryOptionsSection(
+                    category = viewModel.category,
+                    options = viewModel.categoryOptions,
+                )
             }
 
             Section(stringResource(R.string.create_order_section_address)) {
-                OutlinedTextField(
+                RegionPickerField(
                     value = viewModel.region,
-                    onValueChange = { viewModel.region = it },
-                    label = { Text(stringResource(R.string.create_order_region)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { newRegion ->
+                        // Match iOS line 428-430: clear the city when the
+                        // region changes so an old city under the previous
+                        // region can't leak into the new one.
+                        if (newRegion != viewModel.region) viewModel.city = ""
+                        viewModel.region = newRegion
+                    },
+                    label = stringResource(R.string.create_order_region),
                 )
-                OutlinedTextField(
+                CitySearchField(
                     value = viewModel.city,
                     onValueChange = { viewModel.city = it },
-                    label = { Text(stringResource(R.string.create_order_city)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(R.string.create_order_city),
+                    region = viewModel.region,
                 )
                 OutlinedTextField(
                     value = viewModel.street,
                     onValueChange = { viewModel.street = it },
-                    label = { Text(stringResource(R.string.create_order_street)) },
+                    label = { Text(stringResource(R.string.create_order_street_optional)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 OutlinedTextField(
                     value = viewModel.houseNumber,
                     onValueChange = { viewModel.houseNumber = it },
-                    label = { Text(stringResource(R.string.create_order_house_number)) },
+                    label = { Text(stringResource(R.string.create_order_house_number_optional)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -166,7 +180,7 @@ private fun CreateOrderForm(viewModel: CreateOrderViewModel, onClose: () -> Unit
                 )
                 OutlinedTextField(
                     value = viewModel.workVolume,
-                    onValueChange = { viewModel.workVolume = it.filter { ch -> ch.isDigit() || ch == '.' } },
+                    onValueChange = { viewModel.updateWorkVolume(it) },
                     label = { Text(stringResource(R.string.create_order_work_volume)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -218,7 +232,7 @@ private fun CreateOrderForm(viewModel: CreateOrderViewModel, onClose: () -> Unit
 
             viewModel.error?.let { err ->
                 Text(
-                    text = err.message,
+                    text = err.localizedMessage(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),

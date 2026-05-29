@@ -71,7 +71,10 @@ class AddEquipmentViewModel @Inject constructor(
 
     fun submit() {
         val chosenCategory = category ?: run {
-            error = ApiError(message = "Select an equipment type.")
+            error = ApiError(
+                code = ApiError.LocalCodes.GARAGE_CATEGORY_REQUIRED,
+                message = "Select an equipment type.",
+            )
             return
         }
         if (isSubmitting) return
@@ -116,7 +119,10 @@ class AddEquipmentViewModel @Inject constructor(
         selectedPhotos.toList().map { uri ->
             async {
                 val bitmap = bitmapLoader.loadBitmap(uri)
-                    ?: throw ApiError(message = "Could not read one of the photos.")
+                    ?: throw ApiError(
+                        code = ApiError.LocalCodes.GARAGE_PHOTO_READ_FAILED,
+                        message = "Could not read one of the photos.",
+                    )
                 val bytes = ImageEncoder.jpegBytes(bitmap)
                 equipmentRepo.uploadPhoto(bytes)
             }

@@ -12,8 +12,52 @@
     <string name="state_error_title">Something went wrong</string>
     <string name="state_action_call">Call</string>
     <string name="state_action_copy">Copy phone</string>
+    <string name="action_copy_address">Copy address</string>
+
+    <!--
+        Equipment operational status, parsed from
+        `Equipment.characteristics` "Status: <value>" by
+        [EquipmentCharacteristics.status]. Rendered as a small pill on the
+        garage card hero image and on the detail screen header.
+    -->
+    <string name="equipment_status_available">Available</string>
+    <string name="equipment_status_in_use">In Use</string>
+    <string name="equipment_status_maintenance">Maintenance</string>
+
+    <!-- Garage detail icon-row labels (used when rendering parsed characteristics). -->
+    <string name="equipment_detail_vin">VIN</string>
+    <string name="equipment_detail_city">City</string>
+    <string name="equipment_detail_status">Status</string>
 
     <string name="sign_in">Sign in</string>
+
+    <!--
+        ApiError.LocalCodes → user-facing message resolution.
+        Resolved by `ApiError.localizedMessage(context)` in core/ui-kit
+        (see strings/ApiErrorStrings.kt). RU translations are sourced from
+        iOS Localizable.xcstrings to keep both platforms wording-identical.
+    -->
+    <string name="error_invalid_response">The server returned an invalid response.</string>
+    <string name="error_decoding_failed">The app could not read the server response.</string>
+    <string name="error_missing_session">You need to sign in to continue.</string>
+    <string name="error_invalid_phone">Enter a valid Russian phone number.</string>
+    <string name="error_auth_required">Authentication required.</string>
+    <string name="error_url_build_failed">Could not build the request URL.</string>
+    <string name="error_generic_unknown">Something went wrong. Please try again.</string>
+    <string name="error_otp_invalid_or_expired">The code is invalid or has expired. Please try again.</string>
+    <string name="error_otp_rate_limited">Too many attempts. Please wait before trying again.</string>
+    <string name="error_fallback_400">Some fields are invalid. Please review the form and try again.</string>
+    <string name="error_fallback_401">Your session expired. Sign in again.</string>
+    <string name="error_fallback_403">You do not have permission to perform this action.</string>
+    <string name="error_fallback_404">The requested resource was not found.</string>
+    <string name="error_fallback_429">Too many attempts. Please wait before trying again.</string>
+    <string name="error_fallback_503">The SMS provider is temporarily unavailable. Try again later.</string>
+    <string name="error_fallback_other">The server returned an unexpected error.</string>
+    <string name="error_garage_category_required">Select an equipment type.</string>
+    <string name="error_garage_photo_read_failed">Could not prepare the photo for upload.</string>
+    <string name="error_network_offline">No internet connection. Check your network and try again.</string>
+    <string name="error_ssl_failure">Secure connection to the server failed. Update the app or try again later.</string>
+    <string name="error_server_timeout">The server took too long to respond. Try again.</string>
 
     <!-- OrderStatus labels (matched by OrderStatus.titleKey). -->
     <string name="status_open">Open</string>
@@ -69,4 +113,22 @@
     <string name="cat_bitumen_sprayer">Bitumen sprayer</string>
     <string name="cat_forklift">Forklift</string>
     <string name="cat_road_maintenance_vehicle">Road maintenance vehicle</string>
+
+    <!--
+        Shared "X time ago" formatter (see strings/RelativeTime.kt). Consumed
+        by News card timestamps and Notifications inbox rows.
+    -->
+    <string name="time_just_now">just now</string>
+    <plurals name="time_min_ago">
+        <item quantity="one">%d min ago</item>
+        <item quantity="other">%d min ago</item>
+    </plurals>
+    <plurals name="time_hr_ago">
+        <item quantity="one">%d hr ago</item>
+        <item quantity="other">%d hr ago</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
 </resources>

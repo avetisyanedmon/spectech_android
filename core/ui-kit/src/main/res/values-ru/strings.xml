@@ -5,8 +5,62 @@
     <string name="state_error_title">Что-то пошло не так</string>
     <string name="state_action_call">Позвонить</string>
     <string name="state_action_copy">Копировать номер</string>
+    <string name="action_copy_address">Скопировать адрес</string>
+
+    <!-- Статус техники, разбирается из characteristics. -->
+    <string name="equipment_status_available">Доступна</string>
+    <string name="equipment_status_in_use">В работе</string>
+    <string name="equipment_status_maintenance">На обслуживании</string>
+
+    <string name="equipment_detail_vin">VIN</string>
+    <string name="equipment_detail_city">Город</string>
+    <string name="equipment_detail_status">Статус</string>
 
     <string name="sign_in">Войти</string>
+
+    <!-- ApiError.LocalCodes — переводы взяты из iOS Localizable.xcstrings. -->
+    <string name="error_invalid_response">Сервер вернул некорректный ответ.</string>
+    <string name="error_decoding_failed">Не удалось прочитать ответ сервера.</string>
+    <string name="error_missing_session">Войдите, чтобы продолжить.</string>
+    <string name="error_invalid_phone">Введите корректный российский номер.</string>
+    <string name="error_auth_required">Требуется авторизация.</string>
+    <string name="error_url_build_failed">Не удалось сформировать URL запроса.</string>
+    <string name="error_generic_unknown">Что-то пошло не так. Попробуйте снова.</string>
+    <string name="error_otp_invalid_or_expired">Код недействителен или истёк. Попробуйте снова.</string>
+    <string name="error_otp_rate_limited">Слишком много попыток. Подождите.</string>
+    <string name="error_fallback_400">Заполните все поля корректно.</string>
+    <string name="error_fallback_401">Сессия истекла. Войдите снова.</string>
+    <string name="error_fallback_403">Недостаточно прав.</string>
+    <string name="error_fallback_404">Ресурс не найден.</string>
+    <string name="error_fallback_429">Слишком много попыток. Подождите.</string>
+    <string name="error_fallback_503">SMS-сервис недоступен. Попробуйте позже.</string>
+    <string name="error_fallback_other">Непредвиденная ошибка сервера.</string>
+    <string name="error_garage_category_required">Выберите тип техники.</string>
+    <string name="error_garage_photo_read_failed">Не удалось подготовить фото для загрузки.</string>
+    <string name="error_network_offline">Нет соединения с интернетом. Проверьте сеть и попробуйте снова.</string>
+    <string name="error_ssl_failure">Не удалось установить защищённое соединение. Обновите приложение или попробуйте позже.</string>
+    <string name="error_server_timeout">Сервер слишком долго отвечает. Попробуйте снова.</string>
+
+    <!-- Общий форматтер "X времени назад" (см. strings/RelativeTime.kt). -->
+    <string name="time_just_now">только что</string>
+    <plurals name="time_min_ago">
+        <item quantity="one">%d минута назад</item>
+        <item quantity="few">%d минуты назад</item>
+        <item quantity="many">%d минут назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+    <plurals name="time_hr_ago">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="many">%d часов назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d день назад</item>
+        <item quantity="few">%d дня назад</item>
+        <item quantity="many">%d дней назад</item>
+        <item quantity="other">%d дней назад</item>
+    </plurals>
 
     <string name="status_open">Открыт</string>
     <string name="status_pending">В ожидании</string>

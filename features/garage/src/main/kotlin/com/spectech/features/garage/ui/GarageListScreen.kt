@@ -35,15 +35,33 @@ import com.spectech.features.garage.viewmodel.GarageViewModel
 import com.spectech.uikit.components.EmptyStateView
 import com.spectech.uikit.components.ErrorStateView
 import com.spectech.uikit.components.LoadingStateView
+import com.spectech.uikit.components.SignInPromptView
 
 @Composable
 fun GarageListScreen(
     onEquipmentClick: (String) -> Unit,
+    onSignIn: () -> Unit = {},
     paddingValues: PaddingValues = PaddingValues(),
     viewModel: GarageViewModel,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(false) }
+
+    // Defense-in-depth sign-in gate — MainTabsScreen already routes anonymous
+    // users to a placeholder, but mirroring iOS' in-view check (see
+    // SpecTechIOS/Scene/Tabs/Garage/GarageListView.swift:22-28) means a deep
+    // link / preview entry point still renders the right state.
+    if (!viewModel.isAuthenticated) {
+        SignInPromptView(
+            title = stringResource(R.string.garage_signin_title),
+            message = stringResource(R.string.garage_signin_message),
+            actionTitle = stringResource(com.spectech.uikit.R.string.sign_in),
+            icon = Icons.Outlined.Garage,
+            onSignIn = onSignIn,
+            paddingValues = paddingValues,
+        )
+        return
+    }
 
     LaunchedEffect(Unit) {
         if (state is RemoteState.Idle) viewModel.load()

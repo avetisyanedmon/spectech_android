@@ -3,6 +3,8 @@
     <string name="garage_empty_title">Гараж пуст</string>
     <string name="garage_empty_message">Добавьте технику, чтобы подавать ставки в объявлениях.</string>
     <string name="garage_add">Добавить технику</string>
+    <string name="garage_signin_title">Гараж</string>
+    <string name="garage_signin_message">Войдите, чтобы управлять своей техникой.</string>
 
     <string name="equipment_section_characteristics">Характеристики</string>
     <string name="equipment_no_characteristics">Характеристики не указаны.</string>

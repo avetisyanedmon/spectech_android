@@ -6,6 +6,23 @@
     <string name="marketplace_empty_filtered">No orders match the current filters.</string>
     <string name="marketplace_open_filters">Open filters</string>
 
+    <!-- Order card (Section 5 full-parity pass) -->
+    <string name="order_card_equipment_fallback">Equipment</string>
+    <string name="order_card_volume">Volume: %1$s</string>
+    <string name="order_card_bid_count">%1$d bids</string>
+    <string name="order_card_submit_price">Submit price</string>
+    <string name="order_card_waiting_for_answer">Waiting for answer</string>
+    <string name="order_card_offer_accepted">Offer accepted</string>
+
+    <!--
+        Bid-deadline countdown formatted by `Instant.bidTimeRemaining(context)`.
+        Plain printf-style strings (no plural forms) to match iOS literal
+        `%lld d %lld h left for bidding` / xcstrings entries.
+    -->
+    <string name="bid_countdown_days_hours">%1$d d %2$d h left for bidding</string>
+    <string name="bid_countdown_hours_minutes">%1$d h %2$d min left for bidding</string>
+    <string name="bid_countdown_minutes">%1$d min left for bidding</string>
+
     <!-- Order detail -->
     <string name="detail_no_category">Equipment</string>
     <string name="detail_section_terms">Terms</string>
@@ -18,6 +35,51 @@
     <string name="detail_bids_summary_hint">Only the customer can see individual bids. Submit yours below to participate.</string>
     <string name="detail_submit_bid">Submit a bid</string>
 
+    <!-- Order detail (full-parity rewrite) -->
+    <string name="detail_chip_volume">Vol: %1$s</string>
+    <string name="detail_bid_deadline">Bid deadline: %1$s</string>
+    <string name="detail_bid_count">%1$d bids submitted</string>
+    <string name="detail_received_applications">Received Applications (%1$d)</string>
+    <string name="detail_submit_price">Submit price</string>
+    <string name="detail_waiting_for_answer">Waiting for answer</string>
+    <string name="detail_customer_contacts">Customer Contacts</string>
+    <string name="detail_contact_not_yet_available">Contact info not yet available</string>
+    <string name="detail_privacy_notice">Customer contacts will be revealed only if you win this bid</string>
+    <string name="detail_signin_prompt_title">Sign in to participate</string>
+    <string name="detail_signin_prompt_message">Create an account or sign in to submit your bid and compete for this request</string>
+    <string name="detail_copy_order_id">Copy order ID</string>
+    <string name="detail_copy_address">Copy address</string>
+
+    <!-- Withdraw bid -->
+    <string name="detail_withdraw_confirm_title">Withdraw your bid?</string>
+    <string name="detail_withdraw_confirm_message">Your bid will be removed from this order. You can submit a new one later while the order is still open.</string>
+    <string name="detail_withdraw_action">Withdraw bid</string>
+
+    <!-- Delete order -->
+    <string name="detail_delete_order">Delete order</string>
+    <string name="detail_delete_confirm_title">Delete this order?</string>
+    <string name="detail_delete_confirm_message">This will permanently remove the order and all submitted bids. This action cannot be undone.</string>
+    <string name="detail_delete_action">Delete</string>
+    <string name="detail_cancel">Cancel</string>
+
+    <!-- Failure alerts -->
+    <string name="detail_alert_accept_failed">Could not accept bid</string>
+    <string name="detail_alert_withdraw_failed">Could not withdraw bid</string>
+    <string name="detail_alert_delete_failed">Could not delete order</string>
+
+    <!-- BidApplicationCard -->
+    <string name="bid_card_make">Make</string>
+    <string name="bid_card_model">Model</string>
+    <string name="bid_card_year">Year</string>
+    <string name="bid_card_description">Description</string>
+    <string name="bid_card_unit_price">Unit Price</string>
+    <string name="bid_card_delivery_price">Delivery Price</string>
+    <string name="bid_card_accept_offer">Accept Offer</string>
+    <string name="bid_card_offer_accepted">Offer accepted</string>
+    <string name="bid_card_contact_information">Contact Information</string>
+    <string name="bid_card_contact_awaiting">Awaiting contact details from server</string>
+    <string name="bid_card_contact_unavailable">Contact unavailable for this bid. Ask the contractor to resubmit.</string>
+
     <!-- Filter sheet -->
     <string name="filters_title">Filters</string>
     <string name="filters_section_category">Equipment</string>
@@ -25,4 +87,14 @@
     <string name="filters_section_payment">Payment</string>
     <string name="filters_apply">Apply</string>
     <string name="filters_clear">Clear all</string>
+
+    <!-- Saved filter section (Phase 13) -->
+    <string name="filters_saved_section">Notifications about new orders</string>
+    <string name="filters_saved_description">Save these filters and we\'ll push a notification when a new matching order is posted.</string>
+    <string name="filters_save_button">Save filters</string>
+    <string name="filters_saved_toggle">Notify me about matching orders</string>
+    <string name="filters_clear_saved">Clear saved filter</string>
+    <string name="filters_saved_syncing">Syncing…</string>
+    <string name="filters_saved_empty_error">Select at least one filter before enabling notifications.</string>
+    <string name="filters_saved_permission_required">Notification permission is required.</string>
 </resources>

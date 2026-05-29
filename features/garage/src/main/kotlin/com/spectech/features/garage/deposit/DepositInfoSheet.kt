@@ -52,6 +52,7 @@ import com.spectech.domain.enums.DepositStatus
 import com.spectech.domain.model.Deposit
 import com.spectech.features.garage.R
 import com.spectech.platform.web.CustomTabsLauncher
+import com.spectech.uikit.strings.localizedMessage
 import com.spectech.uikit.theme.SuccessGreen
 import com.spectech.uikit.theme.WarningAmber
 import java.text.NumberFormat
@@ -143,7 +144,7 @@ private fun DepositSheetContent(
         viewModel.error?.let { err ->
             Spacer(Modifier.height(12.dp))
             Text(
-                text = err.message,
+                text = err.localizedMessage(),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium,
             )

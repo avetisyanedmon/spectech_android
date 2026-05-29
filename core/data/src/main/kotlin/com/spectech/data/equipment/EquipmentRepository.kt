@@ -17,9 +17,12 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import com.spectech.domain.error.ApiError
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.Serializable
+import timber.log.Timber
 
 /**
  * Wraps the `/equipment` endpoint family. CRUD goes through [ApiClient] for
@@ -39,9 +42,29 @@ class EquipmentRepository @Inject constructor(
     private val events: AppEventBus,
 ) {
 
-    /** Whole garage list for the current contractor. */
-    suspend fun fetchEquipment(): List<Equipment> =
+    /**
+     * Whole garage list for the current contractor.
+     *
+     * Wraps the network call so anything that isn't already an [ApiError]
+     * gets classified (TLS / timeout / offline / decode) by [ApiError.from]
+     * before reaching the ViewModel — without that, a `SocketTimeoutException`
+     * or `kotlinx.serialization.SerializationException` would surface as the
+     * generic `LocalCodes.GENERIC_UNKNOWN` and the user would see "что-то
+     * пошло не так" with no actionable detail. Also logs the raw exception
+     * so a developer can grep `adb logcat | grep EquipmentRepository` to see
+     * the underlying class name + stack trace.
+     */
+    suspend fun fetchEquipment(): List<Equipment> = try {
         api.send<List<Equipment>>(EquipmentApi.FetchAll).data
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: ApiError) {
+        Timber.tag(TAG).w("fetchEquipment: ApiError code=${e.code} status=${e.statusCode} message=${e.message}")
+        throw e
+    } catch (e: Throwable) {
+        Timber.tag(TAG).w(e, "fetchEquipment: raw ${e.javaClass.name} — classifying via ApiError.from")
+        throw ApiError.from(e)
+    }
 
     suspend fun createEquipment(request: CreateEquipmentRequest): Equipment {
         val response = api.send<Equipment>(EquipmentApi.Create(request)).data
@@ -85,6 +108,8 @@ class EquipmentRepository @Inject constructor(
         return envelope.data.url
     }
 }
+
+private const val TAG = "EquipmentRepository"
 
 @Serializable
 private data class UploadedPhotoPayload(val url: String)

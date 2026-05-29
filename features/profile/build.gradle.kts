@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":core:platform"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat) // AppCompatDelegate.setApplicationLocales (language switcher)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)

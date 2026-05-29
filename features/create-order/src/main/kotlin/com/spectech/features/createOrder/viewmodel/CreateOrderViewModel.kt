@@ -28,11 +28,14 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * Drives the Create Order sheet. Phase 6 minimum — the 13 always-required
- * fields. Category-specific optional fields (boom length, lift capacity, etc.)
- * land in a follow-up pass; the `buildOptionsSummary()` port lives there too.
+ * Drives the Create Order sheet. Mirrors iOS `CreateOrderViewModel`
+ * (SpecTechIOS/Features/CreateOrder/CreateOrderView.swift) — including
+ * cross-field validation (bidding deadline strictly before start), the
+ * "Параметры техники: …" options-summary prefix on `description`, and
+ * comma-or-dot decimal handling on `workVolume`.
  *
- * Mirrors iOS `CreateOrderViewModel` in SpecTechIOS/Features/CreateOrder/CreateOrderView.swift.
+ * Street + house are now **optional** (iOS lines 441-448 use no `*` marker)
+ * — only region, city, and work volume are required.
  */
 @HiltViewModel
 class CreateOrderViewModel @Inject constructor(
@@ -52,9 +55,16 @@ class CreateOrderViewModel @Inject constructor(
     var description by mutableStateOf("")
     var durationHours by mutableStateOf(8)
 
+    /**
+     * Category-specific optional fields (boom length, attachments, etc.). The
+     * UI mutates this directly; [submit] reads [CategoryOptionsState.buildSummary]
+     * to prepend the human-readable Russian summary to the description.
+     */
+    val categoryOptions: CategoryOptionsState = CategoryOptionsState()
+
     // ─── Scheduling — local time zone semantics ────────────────────────────
 
-    /** Defaults to tomorrow at 09:00 local time. */
+    /** Defaults to tomorrow at 09:00 local time (iOS uses "tomorrow"). */
     var startDate by mutableStateOf(defaultStartDate())
     var startTime by mutableStateOf(LocalTime(9, 0))
 
@@ -78,6 +88,14 @@ class CreateOrderViewModel @Inject constructor(
         biddingDeadlineManuallyEdited = true
     }
 
+    /**
+     * Replaces the raw work-volume input so the field accepts both comma and
+     * dot decimal separators (matches iOS line 207 `replacingOccurrences(",", ".")`).
+     */
+    fun updateWorkVolume(raw: String) {
+        workVolume = raw.filter { it.isDigit() || it == '.' || it == ',' }
+    }
+
     fun incrementDuration() { durationHours = (durationHours + 1).coerceAtMost(MAX_DURATION_HOURS) }
     fun decrementDuration() { durationHours = (durationHours - 1).coerceAtLeast(MIN_DURATION_HOURS) }
 
@@ -89,20 +107,63 @@ class CreateOrderViewModel @Inject constructor(
     var success by mutableStateOf(false)
         private set
 
+    /**
+     * Submit-enabled gate. Matches iOS `canSubmit` (CreateOrderView.swift:203-209):
+     * only region, city, and a parseable positive work volume are required —
+     * street and house number stay optional.
+     */
     val isFormValid: Boolean
         get() = region.isNotBlank() &&
                 city.isNotBlank() &&
-                street.isNotBlank() &&
-                houseNumber.isNotBlank() &&
-                (workVolume.toDoubleOrNull() ?: 0.0) > 0
+                workVolume.isNotBlank() &&
+                parseVolume(workVolume) != null
 
     fun submit() {
-        if (!isFormValid || isSubmitting) return
+        if (isSubmitting) return
+
+        // Explicit cross-field validation with localized error codes — iOS
+        // pre-flights the same set of checks before the network call.
+        val trimmedRegion = region.trim()
+        if (trimmedRegion.isEmpty()) {
+            error = ApiError(
+                code = ApiError.LocalCodes.FALLBACK_400,
+                message = "Region is required.",
+            )
+            return
+        }
+        val trimmedCity = city.trim()
+        if (trimmedCity.isEmpty()) {
+            error = ApiError(
+                code = ApiError.LocalCodes.FALLBACK_400,
+                message = "City is required.",
+            )
+            return
+        }
+        val volume = parseVolume(workVolume)
+        if (volume == null || volume <= 0.0) {
+            error = ApiError(
+                code = ApiError.LocalCodes.FALLBACK_400,
+                message = "Enter a valid work volume.",
+            )
+            return
+        }
+        // bidding deadline must be strictly before the start date — iOS line 237-240.
+        val tz = TimeZone.currentSystemDefault()
+        val startInstant = startDate.atTime(startTime).toInstant(tz)
+        val deadlineInstant = biddingDeadline.toInstant(tz)
+        if (deadlineInstant >= startInstant) {
+            error = ApiError(
+                code = ApiError.LocalCodes.FALLBACK_400,
+                message = "Bidding deadline must be before the start date.",
+            )
+            return
+        }
+
         viewModelScope.launch {
             isSubmitting = true
             error = null
             try {
-                val request = buildRequest()
+                val request = buildRequest(trimmedCity = trimmedCity, volume = volume)
                 ordersRepo.createOrder(request)
                 success = true
             } catch (e: CancellationException) {
@@ -124,41 +185,73 @@ class CreateOrderViewModel @Inject constructor(
 
     // ─── Wire shape construction ───────────────────────────────────────────
 
-    private fun buildRequest(): CreateOrderRequest {
+    private fun buildRequest(trimmedCity: String, volume: Double): CreateOrderRequest {
         val tz = TimeZone.currentSystemDefault()
         val startDateTime = startDate.atTime(startTime)
-        val expiry = biddingDeadline
 
-        val adDurationSeconds = (expiry.toInstant(tz) - Clock.System.now())
+        // adDuration matches iOS — it's the number of seconds between "now"
+        // and the bidding deadline (the ad's live window). Kept as a server
+        // hint; the backend may overwrite based on its own clock.
+        val adDurationSeconds = (biddingDeadline.toInstant(tz) - Clock.System.now())
             .inWholeSeconds
             .coerceAtLeast(MIN_AD_DURATION_SECONDS)
             .toInt()
 
+        // "region, street, house" but only the non-empty parts — street and
+        // house are now optional and shouldn't introduce empty commas in the
+        // joined string (e.g. "Moscow, , 5" → "Moscow, 5").
         val address = listOf(region, street, houseNumber)
             .map { it.trim() }
             .filter { it.isNotEmpty() }
             .joinToString(", ")
 
+        // iOS time format is "HH:mm" (CreateOrderView.swift:248 uses
+        // `DateFormatter.orderTime` configured as `HH:mm`). Was sending
+        // "HH:mm:ss" before this change.
+        val timeStr = "${pad(startTime.hour)}:${pad(startTime.minute)}"
+
+        // Prepend the human-readable Russian "Параметры техники: …" sentence
+        // to the description so contractors see the category-specific
+        // parameters inline. Marketplace card / detail screen parse the
+        // prefix back out via `parseDescriptionParts` (see Section 5).
+        val trimmedDescription = description.trim()
+        val optionsSummary = categoryOptions.buildSummary(category)
+        val combinedDescription: String? = when {
+            optionsSummary == null && trimmedDescription.isEmpty() -> null
+            optionsSummary == null -> trimmedDescription
+            trimmedDescription.isEmpty() -> optionsSummary
+            else -> optionsSummary + "\n" + trimmedDescription
+        }
+
         return CreateOrderRequest(
             equipmentCategory = category.backendCreateValue,
-            city = city.trim(),
+            city = trimmedCity,
             street = street.trim(),
             houseNumber = houseNumber.trim(),
             address = address,
             paymentTypes = listOf(selectedPaymentType.backendCreateValue),
             pricingUnit = pricingUnit.backendCreateValue,
-            workVolume = workVolume.toDouble(),
+            workVolume = volume,
             startDate = startDate.toString(),
-            startTime = "${pad(startTime.hour)}:${pad(startTime.minute)}:00",
+            startTime = timeStr,
             startDateTime = startDateTime.toInstant(tz).toString(),
             adDuration = adDurationSeconds,
             durationHours = durationHours,
-            expiryDateTime = expiry.toInstant(tz).toString(),
-            description = description.trim().ifEmpty { null },
+            expiryDateTime = biddingDeadline.toInstant(tz).toString(),
+            description = combinedDescription,
         )
     }
 
     private fun pad(value: Int): String = value.toString().padStart(2, '0')
+
+    /**
+     * Parses the work-volume input, accepting both `.` and `,` as decimal
+     * separators (Russian locale convention). Returns `null` for malformed
+     * input — callers treat that as "invalid". Mirrors iOS line 207:
+     * `Double(workVolume.replacingOccurrences(",", "."))`.
+     */
+    private fun parseVolume(raw: String): Double? =
+        raw.trim().replace(',', '.').toDoubleOrNull()
 
     companion object {
         private const val MIN_DURATION_HOURS = 1

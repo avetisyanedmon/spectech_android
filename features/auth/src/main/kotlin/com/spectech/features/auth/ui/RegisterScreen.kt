@@ -39,6 +39,7 @@ import com.spectech.features.auth.R
 import com.spectech.features.auth.ui.components.RussianPhoneField
 import com.spectech.features.auth.util.RussianPhoneFormatter
 import com.spectech.features.auth.viewmodel.AuthFlowViewModel
+import com.spectech.uikit.strings.localizedMessage
 
 @Composable
 fun RegisterScreen(
@@ -139,7 +140,7 @@ fun RegisterScreen(
 
         viewModel.startError?.let { err ->
             Spacer(Modifier.height(8.dp))
-            Text(err.message, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+            Text(err.localizedMessage(), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         }
 
         Spacer(Modifier.height(24.dp))

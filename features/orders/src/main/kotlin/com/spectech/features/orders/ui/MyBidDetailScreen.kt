@@ -33,6 +33,7 @@ import com.spectech.features.orders.viewmodel.MyBidsViewModel
 import com.spectech.uikit.components.LoadingStateView
 import com.spectech.uikit.components.OrderStatusBadge
 import com.spectech.uikit.strings.label
+import com.spectech.uikit.strings.localizedMessage
 
 /**
  * Contractor's view of an order they've bid on. Shows the order header, the
@@ -86,7 +87,7 @@ fun MyBidDetailScreen(
             MyBidCard(bid = bid)
             viewModel.withdrawError?.let { err ->
                 Text(
-                    text = err.message,
+                    text = err.localizedMessage(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                 )

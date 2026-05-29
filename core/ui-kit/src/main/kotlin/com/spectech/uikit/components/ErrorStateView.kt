@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.spectech.domain.error.ApiError
+import com.spectech.uikit.strings.localizedMessage
 
 /**
  * Error icon + headline + the [ApiError] message + retry button. Mirrors iOS
@@ -63,7 +64,7 @@ fun ErrorStateView(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = error.message,
+            text = error.localizedMessage(),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

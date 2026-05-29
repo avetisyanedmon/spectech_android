@@ -26,9 +26,7 @@
     <string name="placeholder_my_bids">Здесь появятся ваши ставки.</string>
     <string name="placeholder_my_orders">Здесь появятся созданные вами заказы.</string>
     <string name="placeholder_garage">Здесь появится ваша техника.</string>
-    <string name="placeholder_news">Здесь появятся новости платформы.</string>
     <string name="placeholder_notifications">Здесь будут показаны push-уведомления.</string>
-    <string name="placeholder_support">Форма поддержки появится в следующем релизе.</string>
 
     <string name="signin_prompt_my_bids">Войдите, чтобы видеть и управлять своими ставками.</string>
     <string name="signin_prompt_my_orders">Войдите, чтобы видеть созданные вами заказы.</string>
@@ -38,4 +36,11 @@
 
     <string name="profile_no_name">Без имени</string>
     <string name="profile_phase_note">Полный профиль появится в следующем релизе.</string>
+
+    <string name="notifications_empty">Уведомлений пока нет. Здесь появятся обновления по вашим заказам и ставкам.</string>
+    <string name="notifications_mark_all_read">Прочитать все</string>
+    <string name="notifications_clear_all">Очистить</string>
+
+    <string name="notification_channel_default">Обновления</string>
+    <string name="notification_channel_default_desc">Обновления по заказам, ставкам и аккаунту.</string>
 </resources>

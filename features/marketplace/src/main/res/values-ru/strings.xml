@@ -5,6 +5,17 @@
     <string name="marketplace_empty_filtered">Под текущие фильтры ничего не подходит.</string>
     <string name="marketplace_open_filters">Открыть фильтры</string>
 
+    <string name="order_card_equipment_fallback">Техника</string>
+    <string name="order_card_volume">Объём: %1$s</string>
+    <string name="order_card_bid_count">%1$d ставок</string>
+    <string name="order_card_submit_price">Предложить цену</string>
+    <string name="order_card_waiting_for_answer">Ожидание ответа</string>
+    <string name="order_card_offer_accepted">Предложение принято</string>
+
+    <string name="bid_countdown_days_hours">%1$d д %2$d ч до окончания приёма ставок</string>
+    <string name="bid_countdown_hours_minutes">%1$d ч %2$d мин до окончания приёма ставок</string>
+    <string name="bid_countdown_minutes">%1$d мин до окончания приёма ставок</string>
+
     <string name="detail_no_category">Техника</string>
     <string name="detail_section_terms">Условия</string>
     <string name="detail_pricing_unit">Единица оплаты</string>
@@ -16,10 +27,59 @@
     <string name="detail_bids_summary_hint">Только заказчик видит отдельные ставки. Подайте свою, чтобы участвовать.</string>
     <string name="detail_submit_bid">Подать ставку</string>
 
+    <string name="detail_chip_volume">Объём: %1$s</string>
+    <string name="detail_bid_deadline">Срок подачи: %1$s</string>
+    <string name="detail_bid_count">Подано ставок: %1$d</string>
+    <string name="detail_received_applications">Полученные заявки (%1$d)</string>
+    <string name="detail_submit_price">Предложить цену</string>
+    <string name="detail_waiting_for_answer">Ожидание ответа</string>
+    <string name="detail_customer_contacts">Контакты заказчика</string>
+    <string name="detail_contact_not_yet_available">Контактные данные пока недоступны</string>
+    <string name="detail_privacy_notice">Контакты заказчика будут раскрыты только если вы выиграете эту ставку</string>
+    <string name="detail_signin_prompt_title">Войдите для участия</string>
+    <string name="detail_signin_prompt_message">Создайте аккаунт или войдите, чтобы подать ставку</string>
+    <string name="detail_copy_order_id">Копировать ID заказа</string>
+    <string name="detail_copy_address">Копировать адрес</string>
+
+    <string name="detail_withdraw_confirm_title">Отменить вашу ставку?</string>
+    <string name="detail_withdraw_confirm_message">Ваша ставка будет снята с этого заказа. Вы сможете подать новую, пока заказ открыт.</string>
+    <string name="detail_withdraw_action">Отозвать ставку</string>
+
+    <string name="detail_delete_order">Удалить заказ</string>
+    <string name="detail_delete_confirm_title">Удалить этот заказ?</string>
+    <string name="detail_delete_confirm_message">Заказ и все полученные ставки будут безвозвратно удалены. Это действие нельзя отменить.</string>
+    <string name="detail_delete_action">Удалить</string>
+    <string name="detail_cancel">Отмена</string>
+
+    <string name="detail_alert_accept_failed">Не удалось принять предложение</string>
+    <string name="detail_alert_withdraw_failed">Не удалось отменить предложение</string>
+    <string name="detail_alert_delete_failed">Не удалось удалить заказ</string>
+
+    <string name="bid_card_make">Марка</string>
+    <string name="bid_card_model">Модель</string>
+    <string name="bid_card_year">Год</string>
+    <string name="bid_card_description">Описание</string>
+    <string name="bid_card_unit_price">Цена за единицу</string>
+    <string name="bid_card_delivery_price">Стоимость доставки</string>
+    <string name="bid_card_accept_offer">Принять предложение</string>
+    <string name="bid_card_offer_accepted">Предложение принято</string>
+    <string name="bid_card_contact_information">Контактная информация</string>
+    <string name="bid_card_contact_awaiting">Ожидание контактных данных от сервера</string>
+    <string name="bid_card_contact_unavailable">Контакт недоступен. Попросите исполнителя подать новую заявку.</string>
+
     <string name="filters_title">Фильтры</string>
     <string name="filters_section_category">Техника</string>
     <string name="filters_section_pricing_unit">Единица оплаты</string>
     <string name="filters_section_payment">Способ оплаты</string>
     <string name="filters_apply">Применить</string>
     <string name="filters_clear">Сбросить</string>
+
+    <string name="filters_saved_section">Уведомления о новых заказах</string>
+    <string name="filters_saved_description">Сохраните фильтры — мы пришлём push, когда появится подходящий заказ.</string>
+    <string name="filters_save_button">Сохранить фильтры</string>
+    <string name="filters_saved_toggle">Уведомлять о подходящих заказах</string>
+    <string name="filters_clear_saved">Удалить сохранённый фильтр</string>
+    <string name="filters_saved_syncing">Синхронизация…</string>
+    <string name="filters_saved_empty_error">Выберите хотя бы один фильтр перед включением уведомлений.</string>
+    <string name="filters_saved_permission_required">Требуется разрешение на уведомления.</string>
 </resources>

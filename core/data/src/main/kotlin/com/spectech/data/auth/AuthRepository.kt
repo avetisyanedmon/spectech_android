@@ -73,17 +73,36 @@ class AuthRepository @Inject constructor(
     suspend fun logout() = sessionStore.clearSession()
 }
 
-/** Translates a low-level exception to an [ApiError] with a friendly message. */
+/**
+ * Translates a low-level exception to an [ApiError] with a friendly message
+ * and a stable [ApiError.LocalCodes] code so the UI layer can resolve the
+ * localized string. English values are developer fallbacks for the rare cases
+ * where the UI has no code mapping.
+ */
 internal fun Throwable.toAuthError(): ApiError {
     if (this is ApiError) return this
     val msg = (localizedMessage ?: message ?: "").lowercase()
     return when {
         "rate" in msg || "429" in msg || "too many" in msg ->
-            ApiError(statusCode = 429, message = "Too many attempts. Please wait before trying again.")
+            ApiError(
+                statusCode = 429,
+                code = ApiError.LocalCodes.OTP_RATE_LIMITED,
+                message = "Too many attempts. Please wait before trying again.",
+            )
         "invalid" in msg || "expired" in msg || "token" in msg ->
-            ApiError(statusCode = 401, message = "The code is invalid or has expired. Please try again.")
+            ApiError(
+                statusCode = 401,
+                code = ApiError.LocalCodes.OTP_INVALID_OR_EXPIRED,
+                message = "The code is invalid or has expired. Please try again.",
+            )
         "phone" in msg || "number" in msg ->
-            ApiError(message = "Enter a valid Russian phone number.")
-        else -> ApiError(message = localizedMessage ?: message ?: "Unknown error")
+            ApiError(
+                code = ApiError.LocalCodes.INVALID_PHONE,
+                message = "Enter a valid Russian phone number.",
+            )
+        else -> ApiError(
+            code = ApiError.LocalCodes.GENERIC_UNKNOWN,
+            message = localizedMessage ?: message ?: "Unknown error",
+        )
     }
 }

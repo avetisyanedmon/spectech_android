@@ -52,6 +52,18 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // Lint catches missing Russian translations across every module via the
+    // standard `MissingTranslation` check. We promote it to an error so a
+    // dropped key in `values-ru/strings.xml` blocks the build before CI
+    // notices. `ExtraTranslation` is informational and stays at warning so
+    // a temporary EN-only key during development doesn't break the build.
+    lint {
+        checkDependencies = true
+        warningsAsErrors = false
+        error += "MissingTranslation"
+        disable += "GradleDependency" // noisy BOM-pinned coordinates
+    }
 }
 
 dependencies {
@@ -94,6 +106,16 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.serialization.json)
+
+    // Firebase Cloud Messaging. The Google Services Gradle plugin is NOT
+    // applied by default — the build works without `google-services.json`,
+    // but push won't actually fire until the team:
+    //   1. Drops the real `google-services.json` into `app/`
+    //   2. Adds `id("com.google.gms.google-services")` to this plugins block
+    // FcmService is registered in the manifest regardless; it stays inert
+    // while Firebase is uninitialized.
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     implementation(libs.timber)
 

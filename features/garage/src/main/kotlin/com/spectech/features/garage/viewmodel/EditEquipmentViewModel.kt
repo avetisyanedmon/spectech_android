@@ -124,7 +124,10 @@ class EditEquipmentViewModel @Inject constructor(
             pendingPhotos.toList().map { uri ->
                 async {
                     val bitmap = bitmapLoader.loadBitmap(uri)
-                        ?: throw ApiError(message = "Could not read one of the photos.")
+                        ?: throw ApiError(
+                            code = ApiError.LocalCodes.GARAGE_PHOTO_READ_FAILED,
+                            message = "Could not read one of the photos.",
+                        )
                     val bytes = ImageEncoder.jpegBytes(bitmap)
                     equipmentRepo.uploadPhoto(bytes)
                 }

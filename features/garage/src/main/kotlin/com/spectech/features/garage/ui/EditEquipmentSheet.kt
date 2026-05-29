@@ -38,6 +38,7 @@ import com.spectech.domain.model.Equipment
 import com.spectech.features.garage.R
 import com.spectech.features.garage.ui.components.PhotoGrid
 import com.spectech.features.garage.viewmodel.EditEquipmentViewModel
+import com.spectech.uikit.strings.localizedMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +130,7 @@ private fun EditEquipmentForm(viewModel: EditEquipmentViewModel, onClose: () -> 
 
             viewModel.error?.let { err ->
                 Text(
-                    text = err.message,
+                    text = err.localizedMessage(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                 )

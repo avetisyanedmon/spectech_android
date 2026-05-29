@@ -79,6 +79,16 @@ class MarketplaceViewModel @Inject constructor(
 
     val isAuthenticated: Boolean get() = sessionStore.isAuthenticated
 
+    /**
+     * Live user-id of the active session. Drives the role-dependent
+     * affordances on each [OrderCardView] (own order / submitted bid /
+     * accepted bid). `null` while signed out. Same `SharingStarted.WhileSubscribed`
+     * cadence as [visibleOrders] so the list pauses observation when off-screen.
+     */
+    val currentUserId: StateFlow<String?> = sessionStore.currentSession
+        .map { it?.user?.id }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), null)
+
     init {
         viewModelScope.launch {
             events.events.filterIsInstance<DomainEvent.OrdersChanged>().collect {

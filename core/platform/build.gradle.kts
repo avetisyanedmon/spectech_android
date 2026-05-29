@@ -23,7 +23,18 @@ android {
         buildConfigField("boolean", "BYPASS_AUTH_FLOW", "false")
         buildConfigField("String", "BYPASS_PHONE", "\"+79990000000\"")
         buildConfigField("String", "BYPASS_CODE", "\"111111\"")
-        buildConfigField("boolean", "PIN_CERTIFICATES", "false")
+        // Default: pin certs (matches iOS). debug build type below opts out so
+        // local proxy tooling (Charles, mitmproxy) still works during dev.
+        buildConfigField("boolean", "PIN_CERTIFICATES", "true")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            buildConfigField("boolean", "PIN_CERTIFICATES", "false")
+        }
+        getByName("release") {
+            buildConfigField("boolean", "PIN_CERTIFICATES", "true")
+        }
     }
 
     buildFeatures {

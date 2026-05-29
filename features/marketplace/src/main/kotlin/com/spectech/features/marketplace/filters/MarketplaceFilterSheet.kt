@@ -33,6 +33,7 @@ import com.spectech.domain.enums.PaymentType
 import com.spectech.domain.enums.PricingUnit
 import com.spectech.domain.model.OrderFilters
 import com.spectech.features.marketplace.R
+import com.spectech.features.marketplace.savedfilter.SavedFilterSection
 import com.spectech.uikit.strings.label
 
 /**
@@ -121,6 +122,12 @@ fun MarketplaceFilterSheet(
             ) {
                 Text(stringResource(R.string.filters_apply))
             }
+
+            // "Save this filter + notify me on new matches" lives below the
+            // primary Apply action so it doesn't compete with the main flow
+            // (browse → filter → apply). It still uses [draft] so the user
+            // can subscribe without first tapping Apply.
+            SavedFilterSection(draft = draft)
 
             Spacer(Modifier.height(8.dp))
         }

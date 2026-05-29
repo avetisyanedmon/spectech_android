@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.spectech.data.auth.SessionStore
 import com.spectech.data.equipment.EquipmentRepository
 import com.spectech.data.events.AppEventBus
 import com.spectech.data.events.DomainEvent
@@ -28,8 +29,15 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class GarageViewModel @Inject constructor(
     private val equipmentRepo: EquipmentRepository,
+    private val sessionStore: SessionStore,
     events: AppEventBus,
 ) : ViewModel() {
+
+    /** Defense-in-depth flag for [GarageListScreen]'s sign-in guard. The
+     *  outer [MainTabsScreen] already gates the whole tab on auth, but the
+     *  screen reads this so deep-link / preview entry points still render
+     *  the friendly sign-in prompt instead of bouncing through a 401. */
+    val isAuthenticated: Boolean get() = sessionStore.isAuthenticated
 
     private val _state = MutableStateFlow<RemoteState<List<Equipment>>>(RemoteState.Idle)
     val state: StateFlow<RemoteState<List<Equipment>>> = _state.asStateFlow()

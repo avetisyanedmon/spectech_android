@@ -27,4 +27,11 @@
     <string name="withdraw_bid_cancel">Отмена</string>
 
     <string name="reveal_customer_contact">Ставка принята — контакты заказчика</string>
+
+    <string name="my_bid_order_id_label">ID:</string>
+    <string name="my_bid_copy_order_id">Копировать ID заказа</string>
+    <string name="my_bid_my_price">Моя цена</string>
+    <string name="my_bid_delivery">Доставка</string>
+    <string name="my_bid_customer_contacts">Контакты заказчика</string>
+    <string name="my_bid_contact_pending">Контактные данные пока недоступны</string>
 </resources>

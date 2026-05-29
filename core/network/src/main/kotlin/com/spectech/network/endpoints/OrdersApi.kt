@@ -7,13 +7,32 @@ import com.spectech.domain.model.OrderFilters
 import com.spectech.network.http.ApiTarget
 import com.spectech.network.http.HttpMethod
 import com.spectech.network.http.SpecTechJson
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 
 /**
- * `/orders` endpoint family. Phase 6 adds [CreateOrder]; delete + bid
- * endpoints arrive with their respective feature phases.
- *
- * Mirrors iOS `OrdersAPI` in SpecTechIOS/Networking/Endpoints/OrdersAPI.swift.
+ * `GET /users/{id}` payload. Mirrors iOS `UserContactResponse`. All fields are
+ * nullable because the backend may omit them when a contractor hasn't filled
+ * out their profile yet.
+ */
+@Serializable
+data class ContractorLookupPayload(
+    val id: String? = null,
+    val phone: String? = null,
+    val name: String? = null,
+    val role: String? = null,
+)
+
+/**
+ * `DELETE /orders/{id}` payload — the server echoes the deleted id. Mirrors
+ * iOS `DeletedOrderId`.
+ */
+@Serializable
+data class DeletedOrderId(val id: String? = null)
+
+/**
+ * `/orders` endpoint family. Mirrors iOS `OrdersAPI`
+ * (SpecTechIOS/Networking/Endpoints/OrdersAPI.swift).
  */
 sealed interface OrdersApi : ApiTarget {
 
@@ -81,6 +100,29 @@ sealed interface OrdersApi : ApiTarget {
     data class WithdrawBid(val orderId: String, val bidId: String) : OrdersApi {
         override val path: String = "orders/${orderId.lowercase()}/bids/${bidId.lowercase()}"
         override val method: HttpMethod = HttpMethod.DELETE
+        override val requiresAuth: Boolean = true
+    }
+
+    /**
+     * Customer removes their own order. Backend rejects if the order has an
+     * accepted bid. Returns [DeletedOrderId].
+     */
+    data class DeleteOrder(val id: String) : OrdersApi {
+        override val path: String = "orders/${id.lowercase()}"
+        override val method: HttpMethod = HttpMethod.DELETE
+        override val requiresAuth: Boolean = true
+    }
+
+    /**
+     * Looks up a single user (typically a contractor whose contact has not yet
+     * been revealed via bid acceptance). Backend returns a [ContractorLookupPayload]
+     * with the public profile fields. iOS calls this from the order-detail screen
+     * when rendering historic bids; the Android marketplace order-detail
+     * rewrite (Section 4) uses it the same way.
+     */
+    data class FetchContractor(val id: String) : OrdersApi {
+        override val path: String = "users/${id.lowercase()}"
+        override val method: HttpMethod = HttpMethod.GET
         override val requiresAuth: Boolean = true
     }
 

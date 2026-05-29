@@ -4,6 +4,8 @@
     <string name="garage_empty_title">Empty garage</string>
     <string name="garage_empty_message">Add equipment to start submitting bids on marketplace orders.</string>
     <string name="garage_add">Add equipment</string>
+    <string name="garage_signin_title">Garage</string>
+    <string name="garage_signin_message">Sign in to manage your equipment.</string>
 
     <!-- Equipment detail -->
     <string name="equipment_section_characteristics">Characteristics</string>

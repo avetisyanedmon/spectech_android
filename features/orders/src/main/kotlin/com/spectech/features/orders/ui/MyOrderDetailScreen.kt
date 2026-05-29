@@ -35,6 +35,7 @@ import com.spectech.features.orders.viewmodel.MyOrdersViewModel
 import com.spectech.uikit.components.LoadingStateView
 import com.spectech.uikit.components.OrderStatusBadge
 import com.spectech.uikit.strings.label
+import com.spectech.uikit.strings.localizedMessage
 
 /**
  * Customer's view of their own order. Shows incoming bids; each bid has an
@@ -154,7 +155,7 @@ private fun BidsListCard(
             }
             acceptError?.let { err ->
                 Text(
-                    text = err.message,
+                    text = err.localizedMessage(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                 )
