@@ -15,6 +15,15 @@
     <string name="order_card_offer_accepted">Offer accepted</string>
 
     <!--
+        Owner-side affordances on the order card. Surface on the My Orders
+        tab (and any other place that reuses the card with showOrderId=true /
+        isOwnOrder=true). Matches iOS OrderCardView.swift lines 156-396.
+    -->
+    <string name="order_card_id_label">ID:</string>
+    <string name="order_card_contractor_contacts">Contractor Contacts</string>
+    <string name="order_card_contact_not_yet_available">Contact info not yet available</string>
+
+    <!--
         Bid-deadline countdown formatted by `Instant.bidTimeRemaining(context)`.
         Plain printf-style strings (no plural forms) to match iOS literal
         `%lld d %lld h left for bidding` / xcstrings entries.
@@ -83,10 +92,28 @@
     <!-- Filter sheet -->
     <string name="filters_title">Filters</string>
     <string name="filters_section_category">Equipment</string>
+    <string name="filters_section_location">Location</string>
     <string name="filters_section_pricing_unit">Pricing unit</string>
     <string name="filters_section_payment">Payment</string>
+    <string name="filters_row_region">Region</string>
+    <string name="filters_row_city">City</string>
+    <string name="filters_summary_any">Any</string>
+    <string name="filters_summary_selected">%1$d selected</string>
     <string name="filters_apply">Apply</string>
     <string name="filters_clear">Clear all</string>
+
+    <!-- Multi-select region / city pickers -->
+    <string name="filters_region_picker_title">Select regions</string>
+    <string name="filters_region_picker_search">Search region</string>
+    <string name="filters_region_picker_empty_title">No regions found</string>
+    <string name="filters_region_picker_empty_message">Try a different spelling.</string>
+    <string name="filters_city_picker_title">Select cities</string>
+    <string name="filters_city_picker_search">Search city</string>
+    <string name="filters_city_picker_empty_title">No cities found</string>
+    <string name="filters_city_picker_empty_message">Try a different spelling.</string>
+    <string name="filters_picker_done">Done</string>
+    <string name="filters_picker_close">Close</string>
+    <string name="filters_picker_reset">Reset</string>
 
     <!-- Saved filter section (Phase 13) -->
     <string name="filters_saved_section">Notifications about new orders</string>

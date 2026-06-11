@@ -60,9 +60,21 @@ fun AddEquipmentSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    // The VM is Hilt-scoped to the surrounding NavBackStackEntry, so it
+    // outlives this sheet. Wipe any leftover state from a previous open —
+    // most importantly the stale Photo Picker URIs whose temporary read
+    // grant has expired — before the user can interact. Keep this above the
+    // success watcher so [clearForm]'s reset of [success] is visible before
+    // the watcher runs its if-check.
+    LaunchedEffect(Unit) {
+        viewModel.clearForm()
+    }
+
     LaunchedEffect(viewModel.success) {
         if (viewModel.success) {
-            viewModel.reset()
+            // Consume before dismissing so a re-open doesn't observe a stale
+            // true and immediately close itself.
+            viewModel.consumeSuccess()
             onDismiss()
         }
     }

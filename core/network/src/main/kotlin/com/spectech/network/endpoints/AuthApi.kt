@@ -15,10 +15,11 @@ internal data class SendOtpBody(val phone: String)
  * Verify-OTP body. Optional registration fields are omitted from the wire
  * payload when null (see [SpecTechJson] config: `explicitNulls = false`).
  *
- * iOS does NOT apply snake_case to request keys (its `JSONEncoder` runs with
- * default key strategy), so `account_type` is what the global JsonNamingStrategy
- * produces and what the backend accepts. If a future request endpoint requires
- * camelCase keys explicitly, set `@SerialName` on those fields.
+ * Wire keys are the camelCase Kotlin property names verbatim — `accountType`,
+ * not `account_type`. The backend validator (`auth.validator.js`) requires
+ * `accountType`, and iOS' `JSONEncoder` runs with the default key strategy and
+ * emits the Swift property names unchanged. See [SpecTechJson] for why we
+ * dropped the global snake_case naming strategy.
  */
 @Serializable
 internal data class VerifyOtpBody(

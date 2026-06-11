@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.spectech.data.auth.SessionStore
 import com.spectech.data.events.AppEventBus
 import com.spectech.data.events.DomainEvent
 import com.spectech.data.orders.OrdersRepository
@@ -17,9 +18,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
@@ -35,6 +39,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MyOrdersViewModel @Inject constructor(
     private val ordersRepo: OrdersRepository,
+    private val sessionStore: SessionStore,
     events: AppEventBus,
 ) : ViewModel() {
 
@@ -51,6 +56,16 @@ class MyOrdersViewModel @Inject constructor(
     var acceptError by mutableStateOf<ApiError?>(null)
     var revealedContacts by mutableStateOf<Map<String, ContractorContact>>(emptyMap())
         private set
+
+    /**
+     * Live user-id of the active session. Drives the role-dependent affordances
+     * on each [com.spectech.features.marketplace.ui.components.OrderCardView]
+     * (own-order branch / accepted-bid badge). Mirrors [MarketplaceViewModel]'s
+     * `currentUserId` so the My Orders list can show the same affordances.
+     */
+    val currentUserId: StateFlow<String?> = sessionStore.currentSession
+        .map { it?.user?.id }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), null)
 
     init {
         viewModelScope.launch {
@@ -127,4 +142,8 @@ class MyOrdersViewModel @Inject constructor(
     }
 
     fun clearAcceptError() { acceptError = null }
+
+    private companion object {
+        const val STOP_TIMEOUT_MS = 5_000L
+    }
 }

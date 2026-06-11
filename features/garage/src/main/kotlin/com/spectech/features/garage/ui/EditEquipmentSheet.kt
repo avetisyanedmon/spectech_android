@@ -49,13 +49,21 @@ fun EditEquipmentSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LaunchedEffect(equipment.id) {
+    // Hilt scopes the VM to the surrounding NavBackStackEntry, so it
+    // outlives this sheet. Wipe pending photo URIs + submission state from
+    // a previous open (their Photo Picker grant has expired), then re-seed
+    // from the latest equipment snapshot so existing photo URLs reflect any
+    // changes that happened since the last edit.
+    LaunchedEffect(Unit) {
+        viewModel.clearForm()
         viewModel.seedFrom(equipment)
     }
 
     LaunchedEffect(viewModel.success) {
         if (viewModel.success) {
-            viewModel.reset()
+            // Consume before dismissing so a re-open doesn't observe a stale
+            // true and immediately close itself.
+            viewModel.consumeSuccess()
             onDismiss()
         }
     }

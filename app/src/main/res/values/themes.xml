@@ -9,10 +9,17 @@
         <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
     </style>
 
-    <!-- Splash screen theme; falls back to Theme.SpecTech once Compose is up. -->
+    <!--
+        Splash screen theme; falls back to Theme.SpecTech once Compose is up.
+        The animated icon is the iOS app icon (ic_launcher) so the brief
+        system splash matches the centered logo card the iOS LaunchScreen
+        storyboard renders. The richer full-bleed launch artwork is rendered
+        afterwards by the Compose `LaunchSplashView` while the session is
+        being restored.
+    -->
     <style name="Theme.SpecTech.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/brand_blue</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="postSplashScreenTheme">@style/Theme.SpecTech</item>
     </style>
 </resources>

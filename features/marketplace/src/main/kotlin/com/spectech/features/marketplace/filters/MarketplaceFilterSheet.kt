@@ -1,19 +1,26 @@
 package com.spectech.features.marketplace.filters
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -24,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,9 +45,16 @@ import com.spectech.features.marketplace.savedfilter.SavedFilterSection
 import com.spectech.uikit.strings.label
 
 /**
- * Marketplace filter sheet (Phase 5 cut). Includes the three dimensions that
- * are pure chip-toggles — equipment category, pricing unit, and payment type.
- * Region + city autocomplete land later when Google Places is configured.
+ * Marketplace filter sheet. Mirrors iOS
+ * `MarketplaceFilterSheet` (SpecTechIOS/Scene/Tabs/Marketplace/Filters/MarketplaceFilterSheet.swift)
+ * across all five dimensions — equipment category, region, city, pricing
+ * unit, payment type — plus the saved-filter + notifications section.
+ *
+ * Region and city use full-screen multi-select dialogs ([MultiRegionPickerDialog],
+ * [MultiCityPickerDialog]) rather than chip groups, since 85 federal subjects
+ * and hundreds of cities don't fit a horizontal chip row. The city row
+ * mirrors iOS' disabled-until-a-region-is-chosen affordance and clears any
+ * staged cities whenever the staged region set is mutated.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +65,9 @@ fun MarketplaceFilterSheet(
 ) {
     var draft by remember { mutableStateOf(current) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    var showRegionPicker by remember { mutableStateOf(false) }
+    var showCityPicker by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -75,6 +93,35 @@ fun MarketplaceFilterSheet(
                             categories = draft.categories.toggle(cat),
                         )
                     },
+                )
+            }
+
+            FilterSection(stringResource(R.string.filters_section_location)) {
+                PickerRow(
+                    title = stringResource(R.string.filters_row_region),
+                    summary = countSummary(
+                        count = draft.regions.size,
+                        anyLabel = stringResource(R.string.filters_summary_any),
+                        selectedLabel = stringResource(
+                            R.string.filters_summary_selected,
+                            draft.regions.size,
+                        ),
+                    ),
+                    enabled = true,
+                    onClick = { showRegionPicker = true },
+                )
+                PickerRow(
+                    title = stringResource(R.string.filters_row_city),
+                    summary = countSummary(
+                        count = draft.selectedCities.size,
+                        anyLabel = stringResource(R.string.filters_summary_any),
+                        selectedLabel = stringResource(
+                            R.string.filters_summary_selected,
+                            draft.selectedCities.size,
+                        ),
+                    ),
+                    enabled = draft.regions.isNotEmpty(),
+                    onClick = { showCityPicker = true },
                 )
             }
 
@@ -132,6 +179,29 @@ fun MarketplaceFilterSheet(
             Spacer(Modifier.height(8.dp))
         }
     }
+
+    if (showRegionPicker) {
+        MultiRegionPickerDialog(
+            selection = draft.regions,
+            onConfirm = { newRegions ->
+                // Match iOS: changing the region set wipes any previously
+                // staged cities so the city scope can never get out of sync
+                // with the region scope.
+                val cleared = if (newRegions != draft.regions) emptySet() else draft.selectedCities
+                draft = draft.copy(regions = newRegions, selectedCities = cleared)
+            },
+            onDismiss = { showRegionPicker = false },
+        )
+    }
+
+    if (showCityPicker) {
+        MultiCityPickerDialog(
+            selection = draft.selectedCities,
+            regions = draft.regions,
+            onConfirm = { newCities -> draft = draft.copy(selectedCities = newCities) },
+            onDismiss = { showCityPicker = false },
+        )
+    }
 }
 
 @Composable
@@ -164,6 +234,54 @@ private fun <T> ChipGroup(
         }
     }
 }
+
+/**
+ * Tap-to-open row used for Region and City. Shows the title on the left, a
+ * count summary on the right ("Any" or "N selected"), and a chevron. Matches
+ * iOS' NavigationLink rows in the Form-style filter sheet.
+ */
+@Composable
+private fun PickerRow(
+    title: String,
+    summary: String,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    val containerAlpha = if (enabled) 1f else 0.4f
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(12.dp),
+            )
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = containerAlpha),
+            modifier = Modifier.weight(1f),
+        )
+        Text(
+            text = summary,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = containerAlpha),
+            modifier = Modifier.padding(end = 8.dp),
+        )
+        Icon(
+            imageVector = Icons.Filled.ChevronRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = containerAlpha),
+            modifier = Modifier.size(20.dp),
+        )
+    }
+}
+
+private fun countSummary(count: Int, anyLabel: String, selectedLabel: String): String =
+    if (count == 0) anyLabel else selectedLabel
 
 private fun <T> Set<T>.toggle(item: T): Set<T> =
     if (item in this) this - item else this + item

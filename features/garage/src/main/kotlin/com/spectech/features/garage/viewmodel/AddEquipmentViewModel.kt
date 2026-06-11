@@ -108,9 +108,35 @@ class AddEquipmentViewModel @Inject constructor(
         }
     }
 
-    fun reset() {
-        success = false
+    /**
+     * Wipe every field the user has touched. Called from [AddEquipmentSheet]
+     * on each sheet open so the form starts blank — Hilt scopes this VM to
+     * the surrounding NavBackStackEntry, so without an explicit reset the
+     * stale name/category/photo URIs from a previous open leak in. The
+     * stale photo URIs are the real hazard: the Photo Picker's temporary
+     * read grant has expired by the time the user submits, so re-uploading
+     * them surfaces a misleading "Could not read one of the photos" error.
+     */
+    fun clearForm() {
+        name = ""
+        category = null
+        vin = ""
+        yearOfManufacture = ""
+        description = ""
+        additionalEquipment = ""
+        selectedPhotos.clear()
         error = null
+        success = false
+    }
+
+    /**
+     * Flip [success] back to false after the sheet has consumed the signal
+     * to dismiss. Without this, the LaunchedEffect that observes [success]
+     * would fire again the next time the sheet recomposes and immediately
+     * close it.
+     */
+    fun consumeSuccess() {
+        success = false
     }
 
     // Helpers ------------------------------------------------------------------

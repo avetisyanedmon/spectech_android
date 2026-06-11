@@ -1,9 +1,10 @@
 package com.spectech.features.marketplace.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,41 +12,58 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.TrendingDown
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.ViewInAr
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.spectech.domain.model.Bid
 import com.spectech.domain.model.Order
 import com.spectech.features.marketplace.R
 import com.spectech.features.marketplace.util.bidTimeRemaining
 import com.spectech.uikit.components.OrderAddressLabel
 import com.spectech.uikit.components.OrderStatusBadge
+import com.spectech.uikit.components.PhoneActionButton
 import com.spectech.uikit.strings.label
 import com.spectech.uikit.theme.SuccessGreen
 import com.spectech.uikit.theme.WarningAmber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.delay
 
 /**
  * One row in the marketplace list. Mirrors iOS `OrderCardView`
@@ -90,12 +108,14 @@ fun OrderCardView(
     isExpired: Boolean = order.isExpired,
     hasSubmittedBid: Boolean = false,
     showBidCount: Boolean = true,
+    showOrderId: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val parts = remember(order.description) { parseDescriptionParts(order.description) }
     val isMyBidAccepted = remember(order, currentUserId) {
         computeMyBidAccepted(order, currentUserId)
     }
+    val acceptedBids = remember(order) { resolveAcceptedBids(order) }
 
     Card(
         modifier = modifier
@@ -110,6 +130,9 @@ fun OrderCardView(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             HeaderRow(order = order, parameters = parts.parameters)
+            if (showOrderId) {
+                OrderIdRow(orderId = order.id)
+            }
             OrderAddressLabel(
                 city = order.city,
                 address = order.address,
@@ -129,6 +152,15 @@ fun OrderCardView(
                 showBidCount = showBidCount,
                 onSubmitBid = onSubmitBid,
             )
+
+            // Contractor contact reveal — shown to the order creator (My Orders
+            // tab) when at least one bid has been accepted, so the phone number
+            // is reachable directly on the card without opening the detail.
+            // Mirrors iOS OrderCardView.swift lines 366-396.
+            if (isOwnOrder && acceptedBids.isNotEmpty()) {
+                HorizontalDivider()
+                acceptedBids.forEach { bid -> AcceptedContractorCard(bid = bid) }
+            }
         }
     }
 }
@@ -423,4 +455,150 @@ private fun computeMyBidAccepted(order: Order, currentUserId: String?): Boolean 
     val legacy = order.acceptedBidId ?: return false
     val legacyBid = order.bids.firstOrNull { it.id == legacy } ?: return false
     return legacyBid.contractorId?.lowercase() == uid || legacyBid.userId?.lowercase() == uid
+}
+
+/**
+ * Returns the bids that have been accepted on this order. Honours both the
+ * `isAccepted` flag on each bid (current contract) and the legacy
+ * `acceptedBidId` pointer (older backend responses). Mirrors iOS
+ * `OrderCardView.acceptedBids`.
+ */
+private fun resolveAcceptedBids(order: Order): List<Bid> {
+    val accepted = order.bids.filter { it.isAccepted }
+    if (accepted.isNotEmpty()) return accepted
+    val legacy = order.acceptedBidId ?: return emptyList()
+    return order.bids.firstOrNull { it.id == legacy }?.let { listOf(it) } ?: emptyList()
+}
+
+// ─── order id row (My Orders / My Bids only) ───────────────────────────────
+
+/**
+ * "ID: ABC12345 ⧉" row matching iOS lines 156-182. Renders the first 8 chars
+ * of the order's UUID in monospace + a copy button that places the FULL UUID
+ * on the clipboard (so the user can paste it into a support chat).
+ */
+@Composable
+private fun OrderIdRow(orderId: String) {
+    val clipboard = LocalClipboardManager.current
+    var copied by remember { mutableStateOf(false) }
+
+    LaunchedEffect(copied) {
+        if (copied) {
+            delay(1500)
+            copied = false
+        }
+    }
+    val bumpScale by animateFloatAsState(
+        targetValue = if (copied) 1.1f else 1f,
+        label = "order-id-copy-bump",
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.order_card_id_label),
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = orderId.take(8).uppercase(),
+            style = MaterialTheme.typography.bodySmall,
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.weight(1f))
+        IconButton(
+            onClick = {
+                clipboard.setText(AnnotatedString(orderId))
+                copied = true
+            },
+            modifier = Modifier.size(28.dp),
+        ) {
+            Icon(
+                imageVector = if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy,
+                contentDescription = stringResource(R.string.detail_copy_order_id),
+                tint = if (copied) SuccessGreen else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size((16f * bumpScale).dp),
+            )
+        }
+    }
+}
+
+// ─── accepted contractor card (My Orders) ──────────────────────────────────
+
+/**
+ * Tinted card surfaced on the My Orders feed after the customer accepts a
+ * contractor's bid: name + phone (with call/copy actions) or a "pending"
+ * fallback while the backend reveals the contact. Mirrors iOS lines 366-396.
+ */
+@Composable
+private fun AcceptedContractorCard(bid: Bid) {
+    val brandBlue = MaterialTheme.colorScheme.primary
+    val contact = bid.contractorContact
+    val displayName = contact?.name ?: bid.contractorName
+    val displayPhone = contact?.phone ?: bid.contractorPhone
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(brandBlue.copy(alpha = 0.06f), RoundedCornerShape(10.dp))
+            .padding(12.dp),
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                text = stringResource(R.string.order_card_contractor_contacts),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            if (!displayName.isNullOrBlank()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Text(
+                        text = displayName,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+
+            if (!displayPhone.isNullOrBlank()) {
+                PhoneActionButton(
+                    phone = displayPhone,
+                    callContentDescription = stringResource(com.spectech.uikit.R.string.state_action_call),
+                    copyContentDescription = stringResource(com.spectech.uikit.R.string.state_action_copy),
+                )
+            } else {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.AccessTime,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Text(
+                        text = stringResource(R.string.order_card_contact_not_yet_available),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
 }

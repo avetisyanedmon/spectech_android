@@ -35,9 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.spectech.domain.util.CitySuggestion
+import com.spectech.domain.util.RegionCities
 import com.spectech.features.createOrder.R
-import com.spectech.features.createOrder.util.CitySuggestion
-import com.spectech.features.createOrder.util.RegionCities
 
 /**
  * Tap-to-open searchable city picker. Mirrors iOS `CitySearchField`

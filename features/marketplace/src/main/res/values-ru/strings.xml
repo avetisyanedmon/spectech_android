@@ -12,6 +12,10 @@
     <string name="order_card_waiting_for_answer">Ожидание ответа</string>
     <string name="order_card_offer_accepted">Предложение принято</string>
 
+    <string name="order_card_id_label">ID:</string>
+    <string name="order_card_contractor_contacts">Контакты исполнителя</string>
+    <string name="order_card_contact_not_yet_available">Контактные данные пока недоступны</string>
+
     <string name="bid_countdown_days_hours">%1$d д %2$d ч до окончания приёма ставок</string>
     <string name="bid_countdown_hours_minutes">%1$d ч %2$d мин до окончания приёма ставок</string>
     <string name="bid_countdown_minutes">%1$d мин до окончания приёма ставок</string>
@@ -69,10 +73,27 @@
 
     <string name="filters_title">Фильтры</string>
     <string name="filters_section_category">Техника</string>
+    <string name="filters_section_location">Локация</string>
     <string name="filters_section_pricing_unit">Единица оплаты</string>
     <string name="filters_section_payment">Способ оплаты</string>
+    <string name="filters_row_region">Регион</string>
+    <string name="filters_row_city">Город</string>
+    <string name="filters_summary_any">Любой</string>
+    <string name="filters_summary_selected">Выбрано: %1$d</string>
     <string name="filters_apply">Применить</string>
     <string name="filters_clear">Сбросить</string>
+
+    <string name="filters_region_picker_title">Выберите регионы</string>
+    <string name="filters_region_picker_search">Поиск региона</string>
+    <string name="filters_region_picker_empty_title">Регионы не найдены</string>
+    <string name="filters_region_picker_empty_message">Попробуйте другое написание.</string>
+    <string name="filters_city_picker_title">Выберите города</string>
+    <string name="filters_city_picker_search">Поиск города</string>
+    <string name="filters_city_picker_empty_title">Города не найдены</string>
+    <string name="filters_city_picker_empty_message">Попробуйте другое написание.</string>
+    <string name="filters_picker_done">Готово</string>
+    <string name="filters_picker_close">Закрыть</string>
+    <string name="filters_picker_reset">Сбросить</string>
 
     <string name="filters_saved_section">Уведомления о новых заказах</string>
     <string name="filters_saved_description">Сохраните фильтры — мы пришлём push, когда появится подходящий заказ.</string>

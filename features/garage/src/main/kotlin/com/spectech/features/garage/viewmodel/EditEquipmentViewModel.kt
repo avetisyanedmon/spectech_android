@@ -58,8 +58,14 @@ class EditEquipmentViewModel @Inject constructor(
 
     val totalPhotoCount: Int get() = existingPhotoUrls.size + pendingPhotos.size
 
+    /**
+     * Always re-seed from the latest equipment snapshot. The previous early-
+     * return guard ("if (equipmentId == equipment.id) return") made the form
+     * show stale photo URLs after a successful submit + remote refresh, so it
+     * was dropped — [EditEquipmentSheet] calls [clearForm] first, then this,
+     * on every open.
+     */
     fun seedFrom(equipment: Equipment) {
-        if (equipmentId == equipment.id) return  // already seeded once
         equipmentId = equipment.id
         name = equipment.name
         description = extractDescription(equipment.characteristics)
@@ -113,9 +119,31 @@ class EditEquipmentViewModel @Inject constructor(
         }
     }
 
-    fun reset() {
-        success = false
+    /**
+     * Wipe pending photos and submission state so the sheet starts from a
+     * clean slate. Called from [EditEquipmentSheet] on each open. The VM is
+     * Hilt-scoped to the surrounding NavBackStackEntry, so without an
+     * explicit reset, leftover `pendingPhotos` URIs from a previous open
+     * resurface — and their Photo Picker read grant has expired, which the
+     * upload reports as "Could not read one of the photos".
+     *
+     * Doesn't touch `name`/`description`/`additionalEquipment`/`existingPhotoUrls`
+     * because [seedFrom] overwrites them immediately afterwards.
+     */
+    fun clearForm() {
+        pendingPhotos.clear()
         error = null
+        success = false
+    }
+
+    /**
+     * Flip [success] back to false after the sheet has consumed the signal
+     * to dismiss. Without this, the LaunchedEffect that observes [success]
+     * would fire again the next time the sheet recomposes and immediately
+     * close it.
+     */
+    fun consumeSuccess() {
+        success = false
     }
 
     private suspend fun uploadPending(): List<String> {

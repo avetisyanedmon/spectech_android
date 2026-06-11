@@ -37,8 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.spectech.domain.util.RussianRegions
 import com.spectech.features.createOrder.R
-import com.spectech.features.createOrder.util.RussianRegions
 
 /**
  * Tap-to-open picker bound to a String. Lists the 85 federal subjects of the

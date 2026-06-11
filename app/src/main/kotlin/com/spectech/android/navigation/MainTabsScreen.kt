@@ -158,7 +158,12 @@ fun MainTabsScreen(
                     }
                 },
                 actions = {
-                    if (activeTabRoute == MarketplaceTab) {
+                    // "Create order" affordance on both the Marketplace and
+                    // My Orders tabs — matches iOS `MyOrdersView`'s primaryAction
+                    // toolbar item which only appears when authenticated.
+                    val showsCreateOrderAffordance =
+                        activeTabRoute == MarketplaceTab || activeTabRoute == MyOrdersTab
+                    if (showsCreateOrderAffordance) {
                         if (isAuthenticated) {
                             IconButton(onClick = { showCreateOrderSheet = true }) {
                                 Icon(
@@ -166,7 +171,10 @@ fun MainTabsScreen(
                                     contentDescription = stringResource(R.string.action_create_order),
                                 )
                             }
-                        } else {
+                        } else if (activeTabRoute == MarketplaceTab) {
+                            // The My Orders tab already shows the auth wall via
+                            // its placeholder, so the sign-in chip is only
+                            // useful on the marketplace tab.
                             TextButton(onClick = { showAuthSheet = true }) {
                                 Text(
                                     stringResource(com.spectech.uikit.R.string.sign_in),

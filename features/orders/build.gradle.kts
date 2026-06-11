@@ -33,6 +33,12 @@ dependencies {
     implementation(project(":core:ui-kit"))
     implementation(project(":core:platform"))
 
+    // The My Orders / My Bids tabs reuse `OrderCardView` and the
+    // bid-deadline countdown helper from the marketplace feature so the
+    // single-source iOS `OrderCardView` parity stays intact across tabs.
+    // One-way dependency — marketplace does not depend on orders.
+    implementation(project(":features:marketplace"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

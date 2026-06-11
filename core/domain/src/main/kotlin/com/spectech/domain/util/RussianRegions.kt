@@ -1,4 +1,4 @@
-package com.spectech.features.createOrder.util
+package com.spectech.domain.util
 
 /**
  * The 85 federal subjects of the Russian Federation — republics, krais,
@@ -9,6 +9,11 @@ package com.spectech.features.createOrder.util
  * shows republics first, then krais, oblasts, federal cities, and autonomous
  * districts. Free-text identity — the backend stores whichever exact string
  * the customer picks, no enum coding.
+ *
+ * Lives in `core/domain/util` because the same data is consumed from both the
+ * create-order form (single-select picker) and the marketplace filter sheet
+ * (multi-select picker). Earlier this lived in `features/create-order` but
+ * was hoisted to share with `:features:marketplace`.
  */
 object RussianRegions {
     val all: List<String> = listOf(

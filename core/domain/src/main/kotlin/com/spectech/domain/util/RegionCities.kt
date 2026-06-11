@@ -1,4 +1,4 @@
-package com.spectech.features.createOrder.util
+package com.spectech.domain.util
 
 /**
  * One city suggestion returned by [RegionCities.topCities]. Mirrors iOS
@@ -14,11 +14,17 @@ data class CitySuggestion(val name: String, val subtitle: String? = null)
  * Static list of major cities for each Russian federal subject. Mirrors iOS
  * `RegionCities.cityMap` (SpecTechIOS/Shared/Views/CitySearchField.swift:424-510).
  *
- * Used as the suggestion source for [CitySearchField] in place of the iOS
- * MapKit `MKLocalSearchCompleter`. A Google Places integration replaces this
- * once the API key is available — the picker UI stays unchanged.
+ * Used as the suggestion source for the city pickers (Create Order single-
+ * select; Marketplace filter multi-select) in place of the iOS MapKit
+ * `MKLocalSearchCompleter`. A Google Places integration replaces this once
+ * the API key is available — the picker UI stays unchanged.
  *
  * Federal cities (Москва, Санкт-Петербург, Севастополь) map to themselves.
+ *
+ * Lives in `core/domain/util` because both `:features:create-order` and
+ * `:features:marketplace` need it. Hoisted out of the create-order module
+ * when the marketplace filter sheet adopted city-level filtering to match
+ * iOS parity.
  */
 object RegionCities {
 
