@@ -282,8 +282,6 @@ private fun PendingDepositCard(viewModel: DepositInfoViewModel, deposit: Deposit
 
 @Composable
 private fun PaidDepositCard(viewModel: DepositInfoViewModel, deposit: Deposit) {
-    var showRefundConfirm by remember { mutableStateOf(false) }
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -316,45 +314,7 @@ private fun PaidDepositCard(viewModel: DepositInfoViewModel, deposit: Deposit) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            OutlinedButton(
-                onClick = { showRefundConfirm = true },
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(50),
-            ) {
-                if (viewModel.isRefundInFlight) {
-                    CircularProgressIndicator(
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size(18.dp),
-                    )
-                } else {
-                    Text(stringResource(R.string.deposit_action_refund))
-                }
-            }
         }
-    }
-
-    if (showRefundConfirm) {
-        AlertDialog(
-            onDismissRequest = { showRefundConfirm = false },
-            title = { Text(stringResource(R.string.deposit_refund_confirm_title)) },
-            text = { Text(stringResource(R.string.deposit_refund_confirm_message)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showRefundConfirm = false
-                    viewModel.refund()
-                }) {
-                    Text(
-                        text = stringResource(R.string.deposit_refund_confirm),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showRefundConfirm = false }) {
-                    Text(stringResource(R.string.deposit_refund_cancel))
-                }
-            },
-        )
     }
 }
 

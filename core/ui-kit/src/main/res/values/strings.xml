@@ -70,15 +70,15 @@
     <string name="status_closed">Closed</string>
 
     <!-- PricingUnit labels (matched by PricingUnit.titleKey). -->
-    <string name="unit_hour">per hour</string>
-    <string name="unit_shift">per shift</string>
-    <string name="unit_m3">per m³</string>
-    <string name="unit_ton">per ton</string>
-    <string name="unit_km">per km</string>
-    <string name="unit_ton_km">per t·km</string>
-    <string name="unit_m3_km">per m³·km</string>
-    <string name="unit_m2">per m²</string>
-    <string name="unit_linear_m">per linear m</string>
+    <string name="unit_hour">Hour</string>
+    <string name="unit_shift">Shift</string>
+    <string name="unit_m3">m³</string>
+    <string name="unit_ton">ton</string>
+    <string name="unit_km">km</string>
+    <string name="unit_ton_km">t:km</string>
+    <string name="unit_m3_km">m³:km</string>
+    <string name="unit_m2">m²</string>
+    <string name="unit_linear_m">per linear meter</string>
 
     <!-- PaymentType labels (matched by PaymentType.titleKey). -->
     <string name="payment_cash">Cash</string>
@@ -93,7 +93,7 @@
     <string name="cat_fuel_tanker">Fuel truck / tanker</string>
     <string name="cat_concrete_mixer">Concrete mixer truck</string>
     <string name="cat_bulldozer">Bulldozer</string>
-    <string name="cat_grader">Grader</string>
+    <string name="cat_grader">Motor grader</string>
     <string name="cat_grab_loader">Grab loader</string>
     <string name="cat_road_roller">Road roller</string>
     <string name="cat_soil_compactor">Soil compactor</string>

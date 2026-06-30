@@ -1,7 +1,6 @@
 package com.spectech.features.createOrder.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,16 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -206,16 +200,12 @@ private fun CreateOrderForm(viewModel: CreateOrderViewModel, onClose: () -> Unit
                     label = stringResource(R.string.create_order_start_time),
                     value = viewModel.startTime,
                     onValueChange = { viewModel.updateStartTime(it) },
+                    error = viewModel.startTimeValidationError,
                 )
                 DateTimeField(
                     label = stringResource(R.string.create_order_bidding_deadline),
                     value = viewModel.biddingDeadline,
                     onValueChange = { viewModel.updateBiddingDeadline(it) },
-                )
-                DurationStepper(
-                    value = viewModel.durationHours,
-                    onIncrement = viewModel::incrementDuration,
-                    onDecrement = viewModel::decrementDuration,
                 )
             }
 
@@ -294,39 +284,3 @@ private fun Section(title: String, content: @Composable () -> Unit) {
     }
 }
 
-@Composable
-private fun DurationStepper(
-    value: Int,
-    onIncrement: () -> Unit,
-    onDecrement: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = stringResource(R.string.create_order_duration_hours),
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            OutlinedIconButton(onClick = onDecrement) {
-                Icon(Icons.Filled.Remove, contentDescription = null)
-            }
-            Box(
-                modifier = Modifier
-                    .width(48.dp)
-                    .wrapContentSize(Alignment.Center),
-            ) {
-                Text(
-                    text = value.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            OutlinedIconButton(onClick = onIncrement) {
-                Icon(Icons.Filled.Add, contentDescription = null)
-            }
-        }
-    }
-}

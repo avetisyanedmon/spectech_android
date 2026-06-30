@@ -19,14 +19,15 @@
     <string name="create_order_city">City</string>
     <string name="create_order_street">Street</string>
     <string name="create_order_house_number">House number</string>
-    <string name="create_order_pricing_unit">Pricing unit</string>
+    <string name="create_order_pricing_unit">Units of measurement</string>
     <string name="create_order_work_volume">Work volume</string>
     <string name="create_order_payment">Payment</string>
     <string name="create_order_start_date">Start date</string>
     <string name="create_order_start_time">Start time</string>
     <string name="create_order_bidding_deadline">Bidding deadline</string>
-    <string name="create_order_duration_hours">Duration (hours)</string>
     <string name="create_order_description">Describe the job (optional)</string>
+    <string name="create_order_error_start_after_deadline">Work start time cannot be later than the bid acceptance time.</string>
+    <string name="create_order_error_start_after_now">Work start time cannot be later than the order creation time.</string>
 
     <!-- Picker labels used by date/time helpers -->
     <string name="create_order_date">Date</string>

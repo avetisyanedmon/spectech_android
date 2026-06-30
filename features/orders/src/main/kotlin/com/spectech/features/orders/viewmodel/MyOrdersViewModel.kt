@@ -13,6 +13,7 @@ import com.spectech.domain.enums.OrderScope
 import com.spectech.domain.error.ApiError
 import com.spectech.domain.model.ContractorContact
 import com.spectech.domain.model.Order
+import com.spectech.domain.model.OrderFilters
 import com.spectech.domain.state.RemoteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -46,6 +48,10 @@ class MyOrdersViewModel @Inject constructor(
     private val _state = MutableStateFlow<RemoteState<List<Order>>>(RemoteState.Idle)
     val state: StateFlow<RemoteState<List<Order>>> = _state.asStateFlow()
 
+    private val _filters = MutableStateFlow(OrderFilters())
+    val filters: StateFlow<OrderFilters> = _filters.asStateFlow()
+
+    var showingFilters by mutableStateOf(false)
     var isLoadingMore by mutableStateOf(false)
         private set
     var hasMorePages by mutableStateOf(true)
@@ -73,6 +79,9 @@ class MyOrdersViewModel @Inject constructor(
                 load(forceRefresh = true)
             }
         }
+        viewModelScope.launch {
+            _filters.drop(1).collect { load(forceRefresh = true) }
+        }
     }
 
     fun load(forceRefresh: Boolean = false) {
@@ -81,7 +90,7 @@ class MyOrdersViewModel @Inject constructor(
             currentOffset = 0
             hasMorePages = true
             try {
-                val orders = ordersRepo.fetchOrders(OrderScope.MINE)
+                val orders = ordersRepo.fetchOrders(OrderScope.MINE, _filters.value)
                 currentOffset = orders.size
                 hasMorePages = orders.size >= pageSize
                 _state.value = if (orders.isEmpty()) {
@@ -111,6 +120,7 @@ class MyOrdersViewModel @Inject constructor(
                     scope = OrderScope.MINE,
                     limit = pageSize,
                     offset = currentOffset,
+                    filters = _filters.value,
                 )
                 hasMorePages = next.size >= pageSize
                 currentOffset += next.size
@@ -122,6 +132,10 @@ class MyOrdersViewModel @Inject constructor(
                 isLoadingMore = false
             }
         }
+    }
+
+    fun setFilters(new: OrderFilters) {
+        _filters.value = new
     }
 
     fun findOrder(orderId: String): Order? =

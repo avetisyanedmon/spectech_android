@@ -1,17 +1,21 @@
 package com.spectech.features.createOrder.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExpandMore
@@ -32,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,6 +55,9 @@ import com.spectech.features.createOrder.R
  * needs a region to scope its suggestions). If the user's city isn't in the
  * static map, an "Use [query]" row at the top of the sheet commits the typed
  * value verbatim so unusual locations still work.
+ *
+ * Implemented as a clickable Box styled to look like an OutlinedTextField
+ * for consistent interaction behavior.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,24 +70,38 @@ fun CitySearchField(
 ) {
     var showSheet by remember { mutableStateOf(false) }
     val enabled = region.trim().isNotEmpty()
+    val borderColor = MaterialTheme.colorScheme.outline
+    val disabledAlpha = if (enabled) 1f else 0.5f
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = {},
-        readOnly = true,
-        enabled = enabled,
-        label = { Text(label) },
-        trailingIcon = {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .border(1.dp, borderColor, RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(4.dp))
+            .clickable(enabled = enabled) { showSheet = true }
+            .alpha(disabledAlpha)
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = if (value.isEmpty()) label else value,
+                color = if (value.isEmpty()) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+            )
             Icon(
                 imageVector = Icons.Filled.ExpandMore,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp),
             )
-        },
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(enabled = enabled) { showSheet = true },
-    )
+        }
+    }
 
     if (showSheet) {
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

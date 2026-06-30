@@ -1,13 +1,18 @@
 package com.spectech.features.marketplace.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,66 +48,84 @@ fun MarketplaceListScreen(
         if (state is RemoteState.Idle) viewModel.load()
     }
 
-    when (val current = state) {
-        RemoteState.Idle, RemoteState.Loading -> LoadingStateView(
-            title = stringResource(com.spectech.uikit.R.string.state_loading),
-            paddingValues = paddingValues,
-        )
-
-        is RemoteState.Empty -> EmptyStateView(
-            title = stringResource(R.string.marketplace_empty_title),
-            message = stringResource(R.string.marketplace_empty_message),
-            actionTitle = stringResource(com.spectech.uikit.R.string.state_retry),
-            icon = Icons.Outlined.Inventory2,
-            onAction = { viewModel.load(forceRefresh = true) },
-            paddingValues = paddingValues,
-        )
-
-        is RemoteState.Failed -> ErrorStateView(
-            error = current.error,
-            title = stringResource(com.spectech.uikit.R.string.state_error_title),
-            retryTitle = stringResource(com.spectech.uikit.R.string.state_retry),
-            onRetry = { viewModel.load(forceRefresh = true) },
-            paddingValues = paddingValues,
-        )
-
-        is RemoteState.Loaded -> {
-            if (visible.isEmpty()) {
-                EmptyStateView(
-                    title = stringResource(R.string.marketplace_empty_title),
-                    message = stringResource(R.string.marketplace_empty_filtered),
-                    actionTitle = stringResource(R.string.marketplace_open_filters),
-                    icon = Icons.Outlined.Inventory2,
-                    onAction = onOpenFilters,
-                    paddingValues = paddingValues,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+    ) {
+        // Filter button header — always visible
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            IconButton(onClick = onOpenFilters) {
+                Icon(
+                    imageVector = Icons.Outlined.FilterAlt,
+                    contentDescription = stringResource(R.string.filters_title),
                 )
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    items(items = visible, key = { it.id }) { order ->
-                        val role = remember(order, currentUserId) {
-                            OrderCardRoleState.from(order, currentUserId)
-                        }
-                        OrderCardView(
-                            order = order,
-                            onClick = { onOrderClick(order.id) },
-                            currentUserId = currentUserId,
-                            isOwnOrder = role.isOwn,
-                            isExpired = order.isExpired,
-                            hasSubmittedBid = role.hasSubmittedBid,
-                            onSubmitBid = when {
-                                role.isOwn || role.hasSubmittedBid -> null
-                                currentUserId == null -> onSignInRequested
-                                else -> { { onSubmitBidRequested(order) } }
-                            },
-                        )
-                        LaunchedEffect(order.id) {
-                            viewModel.loadMoreIfNeeded(order)
+            }
+        }
+
+        // Content area
+        when (val current = state) {
+            RemoteState.Idle, RemoteState.Loading -> LoadingStateView(
+                title = stringResource(com.spectech.uikit.R.string.state_loading),
+                paddingValues = PaddingValues(),
+            )
+
+            is RemoteState.Empty -> EmptyStateView(
+                title = stringResource(R.string.marketplace_empty_title),
+                message = stringResource(R.string.marketplace_empty_message),
+                actionTitle = stringResource(com.spectech.uikit.R.string.state_retry),
+                icon = Icons.Outlined.Inventory2,
+                onAction = { viewModel.load(forceRefresh = true) },
+                paddingValues = PaddingValues(),
+            )
+
+            is RemoteState.Failed -> ErrorStateView(
+                error = current.error,
+                title = stringResource(com.spectech.uikit.R.string.state_error_title),
+                retryTitle = stringResource(com.spectech.uikit.R.string.state_retry),
+                onRetry = { viewModel.load(forceRefresh = true) },
+                paddingValues = PaddingValues(),
+            )
+
+            is RemoteState.Loaded -> {
+                if (visible.isEmpty()) {
+                    EmptyStateView(
+                        title = stringResource(R.string.marketplace_empty_title),
+                        message = stringResource(R.string.marketplace_empty_filtered),
+                        actionTitle = stringResource(R.string.marketplace_open_filters),
+                        icon = Icons.Outlined.Inventory2,
+                        onAction = onOpenFilters,
+                        paddingValues = PaddingValues(),
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        items(items = visible, key = { it.id }) { order ->
+                            val role = remember(order, currentUserId) {
+                                OrderCardRoleState.from(order, currentUserId)
+                            }
+                            OrderCardView(
+                                order = order,
+                                onClick = { onOrderClick(order.id) },
+                                currentUserId = currentUserId,
+                                isOwnOrder = role.isOwn,
+                                isExpired = order.isExpired,
+                                hasSubmittedBid = role.hasSubmittedBid,
+                                onSubmitBid = when {
+                                    role.isOwn || role.hasSubmittedBid -> null
+                                    currentUserId == null -> onSignInRequested
+                                    else -> { { onSubmitBidRequested(order) } }
+                                },
+                            )
+                            LaunchedEffect(order.id) {
+                                viewModel.loadMoreIfNeeded(order)
+                            }
                         }
                     }
                 }

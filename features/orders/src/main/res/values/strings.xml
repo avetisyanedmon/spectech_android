@@ -3,6 +3,8 @@
     <!-- MyOrders list -->
     <string name="my_orders_empty_title">No orders</string>
     <string name="my_orders_empty_message">You haven\'t created any orders yet.</string>
+    <string name="marketplace_empty_filtered">No orders match the current filters.</string>
+    <string name="marketplace_open_filters">Open filters</string>
 
     <!-- MyBids list -->
     <string name="my_bids_empty_title">No bids</string>
@@ -42,4 +44,39 @@
     <string name="my_bid_delivery">Delivery</string>
     <string name="my_bid_customer_contacts">Customer Contacts</string>
     <string name="my_bid_contact_pending">Contact info not yet available</string>
+
+    <!-- Filters -->
+    <string name="filters_open">Filters</string>
+    <string name="filters_title">Filter orders</string>
+    <string name="filters_section_category">Equipment category</string>
+    <string name="filters_section_location">Location</string>
+    <string name="filters_section_pricing_unit">Pricing unit</string>
+    <string name="filters_section_payment">Payment method</string>
+    <string name="filters_row_region">Region</string>
+    <string name="filters_row_city">City</string>
+    <string name="filters_summary_any">Any</string>
+    <string name="filters_summary_selected">%1$d selected</string>
+    <string name="filters_clear">Clear filters</string>
+    <string name="filters_apply">Apply filters</string>
+    <string name="filters_picker_close">Close</string>
+    <string name="filters_picker_done">Done</string>
+    <string name="filters_picker_reset">Reset</string>
+    <string name="filters_region_picker_title">Select regions</string>
+    <string name="filters_region_picker_search">Search regions</string>
+    <string name="filters_region_picker_empty_title">No regions found</string>
+    <string name="filters_region_picker_empty_message">Try a different search</string>
+    <string name="filters_city_picker_title">Select cities</string>
+    <string name="filters_city_picker_search">Search cities</string>
+    <string name="filters_city_picker_empty_title">No cities found</string>
+    <string name="filters_city_picker_empty_message">Try a different search</string>
+
+    <!-- Saved filters & notifications -->
+    <string name="filters_saved_section">Notifications about new orders</string>
+    <string name="filters_saved_description">Save these filters and we\'ll push a notification when a new matching order is posted.</string>
+    <string name="filters_save_button">Save filter</string>
+    <string name="filters_saved_toggle">Notify me about matching orders</string>
+    <string name="filters_saved_syncing">Syncing…</string>
+    <string name="filters_saved_empty_error">Select at least one filter before enabling notifications.</string>
+    <string name="filters_saved_permission_required">Notification permission is required.</string>
+    <string name="filters_clear_saved">Clear saved filter</string>
 </resources>

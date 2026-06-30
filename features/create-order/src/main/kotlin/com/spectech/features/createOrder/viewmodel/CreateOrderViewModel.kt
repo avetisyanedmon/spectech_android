@@ -30,9 +30,10 @@ import kotlinx.datetime.toLocalDateTime
 /**
  * Drives the Create Order sheet. Mirrors iOS `CreateOrderViewModel`
  * (SpecTechIOS/Features/CreateOrder/CreateOrderView.swift) — including
- * cross-field validation (bidding deadline strictly before start), the
- * "Параметры техники: …" options-summary prefix on `description`, and
- * comma-or-dot decimal handling on `workVolume`.
+ * cross-field validation (work start no later than the bid-acceptance time
+ * and no later than the order-creation time), the "Параметры техники: …"
+ * options-summary prefix on `description`, and comma-or-dot decimal handling
+ * on `workVolume`. The standalone "duration" control has been removed.
  *
  * Street + house are now **optional** (iOS lines 441-448 use no `*` marker)
  * — only region, city, and work volume are required.
@@ -53,7 +54,6 @@ class CreateOrderViewModel @Inject constructor(
     var selectedPaymentType by mutableStateOf(PaymentType.CASH)
     var workVolume by mutableStateOf("")
     var description by mutableStateOf("")
-    var durationHours by mutableStateOf(8)
 
     /**
      * Category-specific optional fields (boom length, attachments, etc.). The
@@ -64,11 +64,15 @@ class CreateOrderViewModel @Inject constructor(
 
     // ─── Scheduling — local time zone semantics ────────────────────────────
 
-    /** Defaults to tomorrow at 09:00 local time (iOS uses "tomorrow"). */
+    /**
+     * Defaults to "now" (today at the current local time). The work-start time
+     * is constrained to be no later than the order-creation time, so a future
+     * default would put the form into an invalid state on first open.
+     */
     var startDate by mutableStateOf(defaultStartDate())
-    var startTime by mutableStateOf(LocalTime(9, 0))
+    var startTime by mutableStateOf(defaultStartTime())
 
-    /** Auto-tracks `start - 1h` whenever start changes, but the user can override. */
+    /** Auto-tracks `start + 1h` whenever start changes, but the user can override. */
     var biddingDeadline by mutableStateOf(defaultBiddingDeadline())
         private set
     private var biddingDeadlineManuallyEdited: Boolean = false
@@ -96,9 +100,6 @@ class CreateOrderViewModel @Inject constructor(
         workVolume = raw.filter { it.isDigit() || it == '.' || it == ',' }
     }
 
-    fun incrementDuration() { durationHours = (durationHours + 1).coerceAtMost(MAX_DURATION_HOURS) }
-    fun decrementDuration() { durationHours = (durationHours - 1).coerceAtLeast(MIN_DURATION_HOURS) }
-
     // ─── Submission state ─────────────────────────────────────────────────
 
     var isSubmitting by mutableStateOf(false)
@@ -108,15 +109,35 @@ class CreateOrderViewModel @Inject constructor(
         private set
 
     /**
+     * Real-time time validation state. Returns the error message if the start
+     * time is invalid, or null if valid. Checked against both the current time
+     * and the bidding deadline.
+     */
+    val startTimeValidationError: String?
+        get() {
+            val tz = TimeZone.currentSystemDefault()
+            val startInstant = startDate.atTime(startTime).toInstant(tz)
+            val deadlineInstant = biddingDeadline.toInstant(tz)
+            val now = Clock.System.now()
+
+            return when {
+                startInstant > deadlineInstant -> "Cannot be later than bid acceptance time"
+                startInstant > now -> "Cannot be later than current time"
+                else -> null
+            }
+        }
+
+    /**
      * Submit-enabled gate. Matches iOS `canSubmit` (CreateOrderView.swift:203-209):
      * only region, city, and a parseable positive work volume are required —
-     * street and house number stay optional.
+     * street and house number stay optional. Also requires valid time ranges.
      */
     val isFormValid: Boolean
         get() = region.isNotBlank() &&
                 city.isNotBlank() &&
                 workVolume.isNotBlank() &&
-                parseVolume(workVolume) != null
+                parseVolume(workVolume) != null &&
+                startTimeValidationError == null
 
     fun submit() {
         if (isSubmitting) return
@@ -147,14 +168,25 @@ class CreateOrderViewModel @Inject constructor(
             )
             return
         }
-        // bidding deadline must be strictly before the start date — iOS line 237-240.
+        // Work-start time validation:
+        //   1. start must not be later than the bid-acceptance time (deadline).
+        //   2. start must not be later than the order-creation time (now).
         val tz = TimeZone.currentSystemDefault()
         val startInstant = startDate.atTime(startTime).toInstant(tz)
         val deadlineInstant = biddingDeadline.toInstant(tz)
-        if (deadlineInstant >= startInstant) {
+        val now = Clock.System.now()
+
+        if (startInstant > deadlineInstant) {
             error = ApiError(
                 code = ApiError.LocalCodes.FALLBACK_400,
-                message = "Bidding deadline must be before the start date.",
+                message = "Work start time cannot be later than the bid acceptance time.",
+            )
+            return
+        }
+        if (startInstant > now) {
+            error = ApiError(
+                code = ApiError.LocalCodes.FALLBACK_400,
+                message = "Work start time cannot be later than the current time.",
             )
             return
         }
@@ -236,7 +268,9 @@ class CreateOrderViewModel @Inject constructor(
             startTime = timeStr,
             startDateTime = startDateTime.toInstant(tz).toString(),
             adDuration = adDurationSeconds,
-            durationHours = durationHours,
+            // The duration control was removed from the form; the backend still
+            // requires the field, so we send a fixed default.
+            durationHours = DEFAULT_DURATION_HOURS,
             expiryDateTime = biddingDeadline.toInstant(tz).toString(),
             description = combinedDescription,
         )
@@ -254,22 +288,27 @@ class CreateOrderViewModel @Inject constructor(
         raw.trim().replace(',', '.').toDoubleOrNull()
 
     companion object {
-        private const val MIN_DURATION_HOURS = 1
-        private const val MAX_DURATION_HOURS = 24 * 30
+        private const val DEFAULT_DURATION_HOURS = 8
         private const val MIN_AD_DURATION_SECONDS = 60L
 
-        private fun defaultStartDate(): LocalDate {
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            return now.date.plus(1, DateTimeUnit.DAY)
-        }
+        private fun defaultStartDate(): LocalDate =
+            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        private fun defaultStartTime(): LocalTime =
+            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
 
         private fun defaultBiddingDeadline(): LocalDateTime =
-            autoDeadlineFor(defaultStartDate(), LocalTime(9, 0))
+            autoDeadlineFor(defaultStartDate(), defaultStartTime())
 
+        /**
+         * Bidding deadline auto-tracks `start + 1h`. Since the work-start time
+         * is constrained to be no later than the deadline, the deadline will
+         * always sit at or after the start time.
+         */
         private fun autoDeadlineFor(date: LocalDate, time: LocalTime): LocalDateTime {
             val tz = TimeZone.currentSystemDefault()
             val startInstant = date.atTime(time).toInstant(tz)
-            val auto = startInstant.minus(1, DateTimeUnit.HOUR, tz)
+            val auto = startInstant.plus(1, DateTimeUnit.HOUR, tz)
             val now = Clock.System.now()
             val target = if (auto < now) now else auto
             return target.toLocalDateTime(tz)

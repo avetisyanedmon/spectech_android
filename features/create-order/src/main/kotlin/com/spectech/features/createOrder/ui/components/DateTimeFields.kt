@@ -104,27 +104,38 @@ fun TimeField(
     value: LocalTime,
     onValueChange: (LocalTime) -> Unit,
     modifier: Modifier = Modifier,
+    error: String? = null,
 ) {
     var showPicker by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { showPicker = true },
-    ) {
-        OutlinedTextField(
-            value = formatTime(value),
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(label) },
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = MaterialTheme.typography.bodyLarge,
-        )
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxWidth()
                 .clickable { showPicker = true },
-        )
+        ) {
+            OutlinedTextField(
+                value = formatTime(value),
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(label) },
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodyLarge,
+                isError = error != null,
+            )
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable { showPicker = true },
+            )
+        }
+        if (error != null) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.labelSmall,
+            )
+        }
     }
 
     if (showPicker) {

@@ -2,14 +2,20 @@ package com.spectech.features.orders.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentPasteSearch
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -24,9 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.spectech.domain.model.OrderFilters
 import com.spectech.domain.state.RemoteState
 import com.spectech.features.marketplace.ui.components.OrderCardView
 import com.spectech.features.orders.R
+import com.spectech.features.orders.ui.filters.MyOrdersFilterSheet
 import com.spectech.features.orders.viewmodel.MyOrdersViewModel
 import com.spectech.uikit.components.EmptyStateView
 import com.spectech.uikit.components.ErrorStateView
@@ -56,10 +64,21 @@ fun MyOrdersListScreen(
     viewModel: MyOrdersViewModel,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val filters by viewModel.filters.collectAsStateWithLifecycle()
     val currentUserId by viewModel.currentUserId.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         if (state is RemoteState.Idle) viewModel.load()
+    }
+
+    if (viewModel.showingFilters) {
+        MyOrdersFilterSheet(
+            current = filters,
+            onApply = { newFilters ->
+                viewModel.setFilters(newFilters)
+            },
+            onDismiss = { viewModel.showingFilters = false },
+        )
     }
 
     val pullState = rememberPullToRefreshState()
@@ -72,12 +91,52 @@ fun MyOrdersListScreen(
             paddingValues = paddingValues,
         )
 
-        is RemoteState.Empty -> EmptyStateView(
-            title = stringResource(R.string.my_orders_empty_title),
-            message = stringResource(R.string.my_orders_empty_message),
-            icon = Icons.Outlined.ContentPasteSearch,
-            paddingValues = paddingValues,
-        )
+        is RemoteState.Empty -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    IconButton(onClick = { viewModel.showingFilters = true }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Tune,
+                            contentDescription = stringResource(R.string.filters_open),
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    EmptyStateView(
+                        title = stringResource(R.string.my_orders_empty_title),
+                        message = if (filters.isEmpty) {
+                            stringResource(R.string.my_orders_empty_message)
+                        } else {
+                            stringResource(R.string.marketplace_empty_filtered)
+                        },
+                        actionTitle = if (filters.isEmpty) {
+                            null
+                        } else {
+                            stringResource(R.string.marketplace_open_filters)
+                        },
+                        icon = Icons.Outlined.ContentPasteSearch,
+                        onAction = if (filters.isEmpty) {
+                            null
+                        } else {
+                            { viewModel.showingFilters = true }
+                        },
+                    )
+                }
+            }
+        }
 
         is RemoteState.Failed -> ErrorStateView(
             error = current.error,
@@ -91,37 +150,53 @@ fun MyOrdersListScreen(
             // Reset the spinner once the VM has settled back into Loaded.
             LaunchedEffect(current.value) { isRefreshing = false }
 
-            PullToRefreshBox(
-                isRefreshing = isRefreshing,
-                state = pullState,
-                onRefresh = {
-                    isRefreshing = true
-                    scope.launch { viewModel.load(forceRefresh = true) }
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            ) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        items(items = current.value, key = { it.id }) { order ->
-                            val isOwn = remember(order, currentUserId) {
-                                isCreatedByCurrentUser(order.creatorId, currentUserId)
-                            }
-                            OrderCardView(
-                                order = order,
-                                onClick = { onOrderClick(order.id) },
-                                currentUserId = currentUserId,
-                                isOwnOrder = isOwn,
-                                showOrderId = true,
-                                showBidCount = true,
-                            )
-                            LaunchedEffect(order.id) {
-                                viewModel.loadMoreIfNeeded(order)
+            Column(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    IconButton(onClick = { viewModel.showingFilters = true }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Tune,
+                            contentDescription = stringResource(R.string.filters_open),
+                        )
+                    }
+                }
+
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    state = pullState,
+                    onRefresh = {
+                        isRefreshing = true
+                        scope.launch { viewModel.load(forceRefresh = true) }
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            items(items = current.value, key = { it.id }) { order ->
+                                val isOwn = remember(order, currentUserId) {
+                                    isCreatedByCurrentUser(order.creatorId, currentUserId)
+                                }
+                                OrderCardView(
+                                    order = order,
+                                    onClick = { onOrderClick(order.id) },
+                                    currentUserId = currentUserId,
+                                    isOwnOrder = isOwn,
+                                    showOrderId = true,
+                                    showBidCount = true,
+                                )
+                                LaunchedEffect(order.id) {
+                                    viewModel.loadMoreIfNeeded(order)
+                                }
                             }
                         }
                     }

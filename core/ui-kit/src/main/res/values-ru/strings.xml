@@ -71,14 +71,14 @@
     <string name="status_expired">Истёк срок</string>
     <string name="status_closed">Закрыт</string>
 
-    <string name="unit_hour">за час</string>
-    <string name="unit_shift">за смену</string>
-    <string name="unit_m3">за м³</string>
-    <string name="unit_ton">за тонну</string>
-    <string name="unit_km">за км</string>
-    <string name="unit_ton_km">за т·км</string>
-    <string name="unit_m3_km">за м³·км</string>
-    <string name="unit_m2">за м²</string>
+    <string name="unit_hour">Час</string>
+    <string name="unit_shift">Смена</string>
+    <string name="unit_m3">м³</string>
+    <string name="unit_ton">тонну</string>
+    <string name="unit_km">км</string>
+    <string name="unit_ton_km">т:км</string>
+    <string name="unit_m3_km">м³:км</string>
+    <string name="unit_m2">м²</string>
     <string name="unit_linear_m">за погонный метр</string>
 
     <string name="payment_cash">Наличные</string>
@@ -92,7 +92,7 @@
     <string name="cat_fuel_tanker">Бензовоз / Автоцистерна</string>
     <string name="cat_concrete_mixer">Бетоновоз</string>
     <string name="cat_bulldozer">Бульдозер</string>
-    <string name="cat_grader">Грейдер</string>
+    <string name="cat_grader">Автогрейдер</string>
     <string name="cat_grab_loader">Грейферный погрузчик</string>
     <string name="cat_road_roller">Дорожный каток</string>
     <string name="cat_soil_compactor">Грунтовый каток</string>

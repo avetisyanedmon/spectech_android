@@ -2,6 +2,8 @@
 <resources>
     <string name="my_orders_empty_title">Нет заказов</string>
     <string name="my_orders_empty_message">Вы пока не создали ни одного заказа.</string>
+    <string name="marketplace_empty_filtered">Нет заказов, соответствующих текущим фильтрам.</string>
+    <string name="marketplace_open_filters">Открыть фильтры</string>
 
     <string name="my_bids_empty_title">Нет ставок</string>
     <string name="my_bids_empty_message">Подайте ставку из объявлений, чтобы она появилась здесь.</string>
@@ -34,4 +36,39 @@
     <string name="my_bid_delivery">Доставка</string>
     <string name="my_bid_customer_contacts">Контакты заказчика</string>
     <string name="my_bid_contact_pending">Контактные данные пока недоступны</string>
+
+    <!-- Filters -->
+    <string name="filters_open">Фильтры</string>
+    <string name="filters_title">Фильтр заказов</string>
+    <string name="filters_section_category">Категория техники</string>
+    <string name="filters_section_location">Местоположение</string>
+    <string name="filters_section_pricing_unit">Единица цены</string>
+    <string name="filters_section_payment">Способ оплаты</string>
+    <string name="filters_row_region">Регион</string>
+    <string name="filters_row_city">Город</string>
+    <string name="filters_summary_any">Любой</string>
+    <string name="filters_summary_selected">Выбрано: %1$d</string>
+    <string name="filters_clear">Очистить фильтры</string>
+    <string name="filters_apply">Применить фильтры</string>
+    <string name="filters_picker_close">Закрыть</string>
+    <string name="filters_picker_done">Готово</string>
+    <string name="filters_picker_reset">Сбросить</string>
+    <string name="filters_region_picker_title">Выберите регионы</string>
+    <string name="filters_region_picker_search">Поиск регионов</string>
+    <string name="filters_region_picker_empty_title">Регионы не найдены</string>
+    <string name="filters_region_picker_empty_message">Попробуйте другой поиск</string>
+    <string name="filters_city_picker_title">Выберите города</string>
+    <string name="filters_city_picker_search">Поиск городов</string>
+    <string name="filters_city_picker_empty_title">Города не найдены</string>
+    <string name="filters_city_picker_empty_message">Попробуйте другой поиск</string>
+
+    <!-- Saved filters & notifications -->
+    <string name="filters_saved_section">Уведомления о новых заказах</string>
+    <string name="filters_saved_description">Сохраните эти фильтры, и мы пришлём вам уведомление, когда появится новый подходящий заказ.</string>
+    <string name="filters_save_button">Сохранить фильтр</string>
+    <string name="filters_saved_toggle">Уведомлять меня о подходящих заказах</string>
+    <string name="filters_saved_syncing">Синхронизируется…</string>
+    <string name="filters_saved_empty_error">Выберите хотя бы один фильтр перед включением уведомлений.</string>
+    <string name="filters_saved_permission_required">Требуется разрешение на отправку уведомлений.</string>
+    <string name="filters_clear_saved">Удалить сохранённый фильтр</string>
 </resources>
