@@ -3,16 +3,12 @@ package com.spectech.features.marketplace.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,26 +44,7 @@ fun MarketplaceListScreen(
         if (state is RemoteState.Idle) viewModel.load()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-    ) {
-        // Filter button header — always visible
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            IconButton(onClick = onOpenFilters) {
-                Icon(
-                    imageVector = Icons.Outlined.FilterAlt,
-                    contentDescription = stringResource(R.string.filters_title),
-                )
-            }
-        }
-
-        // Content area
-        when (val current = state) {
+    when (val current = state) {
             RemoteState.Idle, RemoteState.Loading -> LoadingStateView(
                 title = stringResource(com.spectech.uikit.R.string.state_loading),
                 paddingValues = PaddingValues(),

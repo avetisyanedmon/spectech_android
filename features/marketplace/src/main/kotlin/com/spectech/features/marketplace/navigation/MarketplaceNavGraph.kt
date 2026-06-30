@@ -49,6 +49,8 @@ fun MarketplaceNavGraph(
     paddingValues: PaddingValues = PaddingValues(),
     onSubmitBidRequested: (Order) -> Unit = {},
     onSignInRequested: () -> Unit = {},
+    filterButtonClicked: Boolean = false,
+    onFilterShown: () -> Unit = {},
     notificationStore: NotificationStore = hiltViewModel<MarketplaceNavGraphAccessor>().notificationStore,
 ) {
     val accessor: MarketplaceNavGraphAccessor = hiltViewModel()
@@ -56,6 +58,14 @@ fun MarketplaceNavGraph(
     val vm: MarketplaceViewModel = hiltViewModel()
     val filters by vm.filters.collectAsStateWithLifecycle()
     val navigationRequest by notificationStore.navigationRequest.collectAsStateWithLifecycle()
+
+    // Handle filter button clicks from the top bar
+    LaunchedEffect(filterButtonClicked) {
+        if (filterButtonClicked) {
+            vm.showingFilters = true
+            onFilterShown()
+        }
+    }
 
     // Pop to the marketplace root when the user re-taps this tab on the
     // bottom bar — iOS' TabView does this for free.

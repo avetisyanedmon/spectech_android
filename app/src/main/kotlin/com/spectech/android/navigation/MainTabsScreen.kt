@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -113,6 +114,7 @@ fun MainTabsScreen(
     var showSupportSheet by rememberSaveable { mutableStateOf(false) }
     var showNotificationsSheet by rememberSaveable { mutableStateOf(false) }
     var showCreateOrderSheet by rememberSaveable { mutableStateOf(false) }
+    var showMarketplaceFilters by remember { mutableStateOf(false) }
     // Bid sheet target — `remember` (not `rememberSaveable`) because Order isn't @Parcelable.
     var bidSheetOrder by remember { mutableStateOf<Order?>(null) }
 
@@ -158,6 +160,16 @@ fun MainTabsScreen(
                     }
                 },
                 actions = {
+                    // Filter button on Marketplace tab
+                    if (activeTabRoute == MarketplaceTab) {
+                        IconButton(onClick = { showMarketplaceFilters = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.FilterAlt,
+                                contentDescription = stringResource(R.string.filters_title),
+                            )
+                        }
+                    }
+
                     // "Create order" affordance on both the Marketplace and
                     // My Orders tabs — matches iOS `MyOrdersView`'s primaryAction
                     // toolbar item which only appears when authenticated.
@@ -371,6 +383,8 @@ private fun TabsNavHost(
                 paddingValues = PaddingValues(0.dp),
                 onSubmitBidRequested = onSubmitBidRequested,
                 onSignInRequested = onSignIn,
+                filterButtonClicked = showMarketplaceFilters,
+                onFilterShown = { showMarketplaceFilters = false },
             )
         }
         composable<MyBidsTab> {
