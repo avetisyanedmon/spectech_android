@@ -109,7 +109,6 @@ fun MarketplaceListScreen(
             }
         }
     }
-}
 
 /**
  * Per-row role projection. Pulled out of the card so the list screen can

@@ -42,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.spectech.android.BuildConfig
 import com.spectech.android.R
 import com.spectech.android.ui.sheets.NotificationsSheet
+import com.spectech.features.marketplace.R as MarketplaceR
 import com.spectech.android.ui.sheets.ProfileSheet
 import com.spectech.android.ui.tabs.GarageTabPlaceholder
 import com.spectech.android.ui.tabs.MyBidsTabPlaceholder
@@ -165,7 +166,7 @@ fun MainTabsScreen(
                         IconButton(onClick = { showMarketplaceFilters = true }) {
                             Icon(
                                 imageVector = Icons.Outlined.FilterAlt,
-                                contentDescription = stringResource(R.string.filters_title),
+                                contentDescription = stringResource(MarketplaceR.string.filters_title),
                             )
                         }
                     }
