@@ -274,6 +274,8 @@ fun MainTabsScreen(
             isAuthenticated = isAuthenticated,
             onSignIn = { showAuthSheet = true },
             onSubmitBidRequested = { order -> bidSheetOrder = order },
+            showMarketplaceFilters = showMarketplaceFilters,
+            onFilterShown = { showMarketplaceFilters = false },
         )
     }
 
@@ -370,6 +372,8 @@ private fun TabsNavHost(
     isAuthenticated: Boolean,
     onSignIn: () -> Unit,
     onSubmitBidRequested: (Order) -> Unit,
+    showMarketplaceFilters: Boolean,
+    onFilterShown: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -384,7 +388,7 @@ private fun TabsNavHost(
                 onSubmitBidRequested = onSubmitBidRequested,
                 onSignInRequested = onSignIn,
                 filterButtonClicked = showMarketplaceFilters,
-                onFilterShown = { showMarketplaceFilters = false },
+                onFilterShown = onFilterShown,
             )
         }
         composable<MyBidsTab> {
