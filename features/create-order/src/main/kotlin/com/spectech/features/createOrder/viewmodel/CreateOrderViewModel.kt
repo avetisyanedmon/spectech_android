@@ -30,8 +30,8 @@ import kotlinx.datetime.toLocalDateTime
 /**
  * Drives the Create Order sheet. Mirrors iOS `CreateOrderViewModel`
  * (SpecTechIOS/Features/CreateOrder/CreateOrderView.swift) — including
- * cross-field validation (work start no later than the bid-acceptance time
- * and no later than the order-creation time), the "Параметры техники: …"
+ * cross-field validation (work start no later than the bid-acceptance
+ * time), the "Параметры техники: …"
  * options-summary prefix on `description`, and comma-or-dot decimal handling
  * on `workVolume`. The standalone "duration" control has been removed.
  *
@@ -65,9 +65,9 @@ class CreateOrderViewModel @Inject constructor(
     // ─── Scheduling — local time zone semantics ────────────────────────────
 
     /**
-     * Defaults to "now" (today at the current local time). The work-start time
-     * is constrained to be no later than the order-creation time, so a future
-     * default would put the form into an invalid state on first open.
+     * Defaults to "now" (today at the current local time). The work-start
+     * time is constrained only by the bidding deadline: it must be no later
+     * than the bid-acceptance end time.
      */
     var startDate by mutableStateOf(defaultStartDate())
     var startTime by mutableStateOf(defaultStartTime())
@@ -109,22 +109,15 @@ class CreateOrderViewModel @Inject constructor(
         private set
 
     /**
-     * Real-time time validation state. Returns the error message if the start
-     * time is invalid, or null if valid. Checked against both the current time
-     * and the bidding deadline.
+     * Real-time validation: true when the work start is later than the
+     * bid-acceptance end time (the bidding deadline) — the only scheduling
+     * constraint. The UI resolves the localized error message.
      */
-    val startTimeValidationError: String?
+    val isStartAfterBiddingDeadline: Boolean
         get() {
             val tz = TimeZone.currentSystemDefault()
             val startInstant = startDate.atTime(startTime).toInstant(tz)
-            val deadlineInstant = biddingDeadline.toInstant(tz)
-            val now = Clock.System.now()
-
-            return when {
-                startInstant > deadlineInstant -> "Cannot be later than bid acceptance time"
-                startInstant > now -> "Cannot be later than current time"
-                else -> null
-            }
+            return startInstant > biddingDeadline.toInstant(tz)
         }
 
     /**
@@ -137,7 +130,7 @@ class CreateOrderViewModel @Inject constructor(
                 city.isNotBlank() &&
                 workVolume.isNotBlank() &&
                 parseVolume(workVolume) != null &&
-                startTimeValidationError == null
+                !isStartAfterBiddingDeadline
 
     fun submit() {
         if (isSubmitting) return
@@ -168,25 +161,12 @@ class CreateOrderViewModel @Inject constructor(
             )
             return
         }
-        // Work-start time validation:
-        //   1. start must not be later than the bid-acceptance time (deadline).
-        //   2. start must not be later than the order-creation time (now).
-        val tz = TimeZone.currentSystemDefault()
-        val startInstant = startDate.atTime(startTime).toInstant(tz)
-        val deadlineInstant = biddingDeadline.toInstant(tz)
-        val now = Clock.System.now()
-
-        if (startInstant > deadlineInstant) {
+        // Work-start time validation: start must not be later than the
+        // bid-acceptance time (deadline).
+        if (isStartAfterBiddingDeadline) {
             error = ApiError(
                 code = ApiError.LocalCodes.FALLBACK_400,
                 message = "Work start time cannot be later than the bid acceptance time.",
-            )
-            return
-        }
-        if (startInstant > now) {
-            error = ApiError(
-                code = ApiError.LocalCodes.FALLBACK_400,
-                message = "Work start time cannot be later than the current time.",
             )
             return
         }

@@ -25,7 +25,6 @@
     <string name="create_order_bidding_deadline">Окончание приёма ставок</string>
     <string name="create_order_description">Опишите задачу (необязательно)</string>
     <string name="create_order_error_start_after_deadline">Время начала работы не может быть позже времени приёма ставок.</string>
-    <string name="create_order_error_start_after_now">Время начала работы не может быть позже времени создания заказа.</string>
 
     <string name="create_order_date">Дата</string>
     <string name="create_order_time">Время</string>
