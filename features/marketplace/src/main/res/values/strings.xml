@@ -107,10 +107,9 @@
     <string name="filters_region_picker_search">Search region</string>
     <string name="filters_region_picker_empty_title">No regions found</string>
     <string name="filters_region_picker_empty_message">Try a different spelling.</string>
-    <string name="filters_city_picker_title">Select cities</string>
     <string name="filters_city_picker_search">Search city</string>
     <string name="filters_city_picker_empty_title">No cities found</string>
-    <string name="filters_city_picker_empty_message">Try a different spelling.</string>
+    <string name="filters_city_remove">Remove %1$s</string>
     <string name="filters_picker_done">Done</string>
     <string name="filters_picker_close">Close</string>
     <string name="filters_picker_reset">Reset</string>

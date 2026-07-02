@@ -57,10 +57,9 @@
     <string name="filters_region_picker_search">Поиск регионов</string>
     <string name="filters_region_picker_empty_title">Регионы не найдены</string>
     <string name="filters_region_picker_empty_message">Попробуйте другой поиск</string>
-    <string name="filters_city_picker_title">Выберите города</string>
     <string name="filters_city_picker_search">Поиск городов</string>
     <string name="filters_city_picker_empty_title">Города не найдены</string>
-    <string name="filters_city_picker_empty_message">Попробуйте другой поиск</string>
+    <string name="filters_city_remove">Убрать %1$s</string>
 
     <!-- Saved filters & notifications -->
     <string name="filters_saved_section">Уведомления о новых заказах</string>

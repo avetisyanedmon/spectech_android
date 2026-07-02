@@ -44,8 +44,7 @@
     <string name="city_picker_title">Выберите город</string>
     <string name="city_picker_search_placeholder">Поиск города</string>
     <string name="city_picker_empty_title">Города не найдены</string>
-    <string name="city_picker_empty_message">Введите название города — оно будет сохранено как есть.</string>
-    <string name="city_picker_use_typed">Использовать «%1$s»</string>
+    <string name="city_picker_empty_message">Попробуйте другое написание.</string>
 
     <string name="opt_type">Тип</string>
     <string name="opt_size">Размер</string>

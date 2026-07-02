@@ -51,8 +51,7 @@
     <string name="city_picker_title">Select city</string>
     <string name="city_picker_search_placeholder">Search city</string>
     <string name="city_picker_empty_title">No cities found</string>
-    <string name="city_picker_empty_message">Type a city name and we\'ll commit it as-is.</string>
-    <string name="city_picker_use_typed">Use “%1$s”</string>
+    <string name="city_picker_empty_message">Try a different spelling.</string>
 
     <!-- Category-specific option field labels (iOS canonical) -->
     <string name="opt_type">Type</string>

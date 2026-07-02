@@ -87,10 +87,9 @@
     <string name="filters_region_picker_search">Поиск региона</string>
     <string name="filters_region_picker_empty_title">Регионы не найдены</string>
     <string name="filters_region_picker_empty_message">Попробуйте другое написание.</string>
-    <string name="filters_city_picker_title">Выберите города</string>
     <string name="filters_city_picker_search">Поиск города</string>
     <string name="filters_city_picker_empty_title">Города не найдены</string>
-    <string name="filters_city_picker_empty_message">Попробуйте другое написание.</string>
+    <string name="filters_city_remove">Убрать %1$s</string>
     <string name="filters_picker_done">Готово</string>
     <string name="filters_picker_close">Закрыть</string>
     <string name="filters_picker_reset">Сбросить</string>

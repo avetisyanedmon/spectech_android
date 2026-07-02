@@ -59,7 +59,6 @@ fun MyOrdersFilterSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     var showRegionPicker by remember { mutableStateOf(false) }
-    var showCityPicker by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -102,18 +101,12 @@ fun MyOrdersFilterSheet(
                     enabled = true,
                     onClick = { showRegionPicker = true },
                 )
-                PickerRow(
-                    title = stringResource(R.string.filters_row_city),
-                    summary = countSummary(
-                        count = draft.selectedCities.size,
-                        anyLabel = stringResource(R.string.filters_summary_any),
-                        selectedLabel = stringResource(
-                            R.string.filters_summary_selected,
-                            draft.selectedCities.size,
-                        ),
-                    ),
-                    enabled = draft.regions.isNotEmpty(),
-                    onClick = { showCityPicker = true },
+                CityAutocompleteField(
+                    selection = draft.selectedCities,
+                    regions = draft.regions,
+                    onSelectionChange = { newCities ->
+                        draft = draft.copy(selectedCities = newCities)
+                    },
                 )
             }
 
@@ -178,15 +171,6 @@ fun MyOrdersFilterSheet(
                 draft = draft.copy(regions = newRegions, selectedCities = cleared)
             },
             onDismiss = { showRegionPicker = false },
-        )
-    }
-
-    if (showCityPicker) {
-        MultiCityPickerDialog(
-            selection = draft.selectedCities,
-            regions = draft.regions,
-            onConfirm = { newCities -> draft = draft.copy(selectedCities = newCities) },
-            onDismiss = { showCityPicker = false },
         )
     }
 }

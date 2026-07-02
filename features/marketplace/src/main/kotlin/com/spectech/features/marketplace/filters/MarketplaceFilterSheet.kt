@@ -50,11 +50,14 @@ import com.spectech.uikit.strings.label
  * across all five dimensions — equipment category, region, city, pricing
  * unit, payment type — plus the saved-filter + notifications section.
  *
- * Region and city use full-screen multi-select dialogs ([MultiRegionPickerDialog],
- * [MultiCityPickerDialog]) rather than chip groups, since 85 federal subjects
- * and hundreds of cities don't fit a horizontal chip row. The city row
- * mirrors iOS' disabled-until-a-region-is-chosen affordance and clears any
- * staged cities whenever the staged region set is mutated.
+ * Region uses a full-screen multi-select dialog ([MultiRegionPickerDialog])
+ * rather than a chip group, since 85 federal subjects don't fit a horizontal
+ * chip row. City is an inline strict autocomplete ([CityAutocompleteField]):
+ * typing only filters the suggestions, selection happens only from the
+ * dropdown, and typed text is discarded when the field closes without a
+ * pick. The city field mirrors iOS' disabled-until-a-region-is-chosen
+ * affordance and clears any staged cities whenever the staged region set is
+ * mutated.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +70,6 @@ fun MarketplaceFilterSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     var showRegionPicker by remember { mutableStateOf(false) }
-    var showCityPicker by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -110,18 +112,12 @@ fun MarketplaceFilterSheet(
                     enabled = true,
                     onClick = { showRegionPicker = true },
                 )
-                PickerRow(
-                    title = stringResource(R.string.filters_row_city),
-                    summary = countSummary(
-                        count = draft.selectedCities.size,
-                        anyLabel = stringResource(R.string.filters_summary_any),
-                        selectedLabel = stringResource(
-                            R.string.filters_summary_selected,
-                            draft.selectedCities.size,
-                        ),
-                    ),
-                    enabled = draft.regions.isNotEmpty(),
-                    onClick = { showCityPicker = true },
+                CityAutocompleteField(
+                    selection = draft.selectedCities,
+                    regions = draft.regions,
+                    onSelectionChange = { newCities ->
+                        draft = draft.copy(selectedCities = newCities)
+                    },
                 )
             }
 
@@ -191,15 +187,6 @@ fun MarketplaceFilterSheet(
                 draft = draft.copy(regions = newRegions, selectedCities = cleared)
             },
             onDismiss = { showRegionPicker = false },
-        )
-    }
-
-    if (showCityPicker) {
-        MultiCityPickerDialog(
-            selection = draft.selectedCities,
-            regions = draft.regions,
-            onConfirm = { newCities -> draft = draft.copy(selectedCities = newCities) },
-            onDismiss = { showCityPicker = false },
         )
     }
 }

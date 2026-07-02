@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,9 +53,10 @@ import com.spectech.features.createOrder.R
  * source once the API key is available — the picker UI stays unchanged.
  *
  * The field is disabled until [region] is selected (matches iOS — the picker
- * needs a region to scope its suggestions). If the user's city isn't in the
- * static map, an "Use [query]" row at the top of the sheet commits the typed
- * value verbatim so unusual locations still work.
+ * needs a region to scope its suggestions). Selection is strict: typing only
+ * filters the suggestions and a city can only be committed by tapping one —
+ * closing the sheet without a pick discards the typed text, so free-text
+ * cities can never enter an order.
  *
  * Implemented as a clickable Box styled to look like an OutlinedTextField
  * for consistent interaction behavior.
@@ -70,6 +72,18 @@ fun CitySearchField(
 ) {
     var showSheet by remember { mutableStateOf(false) }
     val enabled = region.trim().isNotEmpty()
+
+    // Selection is strict: a committed value that isn't one of the region's
+    // suggestions (stale free text from an older build, or a leftover from a
+    // region switch) is flushed rather than displayed.
+    LaunchedEffect(region, value) {
+        if (value.isNotEmpty() &&
+            RegionCities.topCities(region).none { it.name.equals(value, ignoreCase = true) }
+        ) {
+            onValueChange("")
+        }
+    }
+
     val borderColor = MaterialTheme.colorScheme.outline
     val disabledAlpha = if (enabled) 1f else 0.5f
 
@@ -139,14 +153,6 @@ private fun CityPickerSheetContent(
         }
     }
 
-    // Allow the user to commit a free-text city when their location isn't in
-    // the static top-cities list. Only surface this if the typed query doesn't
-    // exactly match an existing suggestion — otherwise it's redundant.
-    val canCommitFreeText = remember(query, filtered) {
-        val trimmed = query.trim()
-        trimmed.isNotEmpty() && filtered.none { it.name.equals(trimmed, ignoreCase = true) }
-    }
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.city_picker_title),
@@ -176,7 +182,7 @@ private fun CityPickerSheetContent(
 
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-        if (filtered.isEmpty() && !canCommitFreeText) {
+        if (filtered.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -207,15 +213,6 @@ private fun CityPickerSheetContent(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(bottom = 24.dp),
             ) {
-                if (canCommitFreeText) {
-                    item("free-text") {
-                        FreeTextRow(query = query.trim(), onPick = onPick)
-                        HorizontalDivider(
-                            modifier = Modifier.padding(start = 20.dp),
-                            color = MaterialTheme.colorScheme.outlineVariant,
-                        )
-                    }
-                }
                 items(items = filtered, key = { it.name + ":" + it.subtitle.orEmpty() }) { city ->
                     CityRow(
                         city = city,
@@ -268,28 +265,3 @@ private fun CityRow(city: CitySuggestion, isSelected: Boolean, onClick: () -> Un
     }
 }
 
-@Composable
-private fun FreeTextRow(query: String, onPick: (String) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.06f))
-            .clickable { onPick(query) }
-            .padding(horizontal = 20.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Search,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(18.dp),
-        )
-        Text(
-            text = stringResource(R.string.city_picker_use_typed, query),
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start = 12.dp),
-        )
-    }
-}

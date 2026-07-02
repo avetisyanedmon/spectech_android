@@ -65,10 +65,9 @@
     <string name="filters_region_picker_search">Search regions</string>
     <string name="filters_region_picker_empty_title">No regions found</string>
     <string name="filters_region_picker_empty_message">Try a different search</string>
-    <string name="filters_city_picker_title">Select cities</string>
     <string name="filters_city_picker_search">Search cities</string>
     <string name="filters_city_picker_empty_title">No cities found</string>
-    <string name="filters_city_picker_empty_message">Try a different search</string>
+    <string name="filters_city_remove">Remove %1$s</string>
 
     <!-- Saved filters & notifications -->
     <string name="filters_saved_section">Notifications about new orders</string>
