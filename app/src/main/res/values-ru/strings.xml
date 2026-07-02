@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">СпецТех</string>
+    <string name="app_name">СпецПаркинг</string>
 
     <string name="restoring_session">Восстанавливаем сессию…</string>
     <string name="logout">Выйти</string>

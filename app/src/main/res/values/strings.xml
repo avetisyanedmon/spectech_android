@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SpecTech</string>
+    <string name="app_name">SpecParking</string>
 
     <!-- Phase 2: session restore + logout -->
     <string name="restoring_session">Restoring session…</string>
