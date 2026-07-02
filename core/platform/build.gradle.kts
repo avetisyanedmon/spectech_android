@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,24 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
+
+// The HMAC signing secret must never be committed. Resolution order:
+//   1. Gradle property   (-PSPECTECH_API_CLIENT_SECRET=... — CI)
+//   2. Environment var   (SPECTECH_API_CLIENT_SECRET — CI)
+//   3. local.properties  (gitignored — local development)
+// The build fails fast with instructions when none is present.
+val apiClientSecret: String = providers.gradleProperty("SPECTECH_API_CLIENT_SECRET").orNull
+    ?: providers.environmentVariable("SPECTECH_API_CLIENT_SECRET").orNull
+    ?: rootProject.file("local.properties").takeIf { it.exists() }?.let { file ->
+        Properties()
+            .apply { file.inputStream().use { load(it) } }
+            .getProperty("SPECTECH_API_CLIENT_SECRET")
+    }
+    ?: error(
+        "SPECTECH_API_CLIENT_SECRET is not set. Add " +
+            "`SPECTECH_API_CLIENT_SECRET=<secret>` to local.properties, or pass it as " +
+            "a Gradle property / environment variable in CI. See SETUP.md → 'API client secret'."
+    )
 
 android {
     namespace = "com.spectech.platform"
@@ -15,11 +35,7 @@ android {
 
         buildConfigField("String", "API_BASE_URL", "\"https://spectech-backoffice.onrender.com/api\"")
         buildConfigField("String", "API_CLIENT_ID", "\"ios-app\"")
-        buildConfigField(
-            "String",
-            "API_CLIENT_SECRET",
-            "\"66ff056ee8fa15b144a54ab472222b0a7534fe16286d1cfb893f6495fe65be96\""
-        )
+        buildConfigField("String", "API_CLIENT_SECRET", "\"$apiClientSecret\"")
         buildConfigField("boolean", "BYPASS_AUTH_FLOW", "false")
         buildConfigField("String", "BYPASS_PHONE", "\"+79990000000\"")
         buildConfigField("String", "BYPASS_CODE", "\"111111\"")

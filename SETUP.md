@@ -61,7 +61,26 @@ To run on a device:
 
 You should see **Hello SpecTech** centered on a Material 3 surface.
 
-## 5. (Later) Things to install before Phase 11
+## 5. API client secret (required to build)
+
+The HMAC request-signing secret is **not** committed to the repository. The
+build of `:core:platform` fails with a clear error until you provide it via
+one of (checked in this order):
+
+1. Gradle property: `./gradlew assembleDebug -PSPECTECH_API_CLIENT_SECRET=<secret>`
+2. Environment variable: `export SPECTECH_API_CLIENT_SECRET=<secret>` (CI)
+3. `local.properties` (local dev, gitignored):
+
+   ```properties
+   SPECTECH_API_CLIENT_SECRET=<secret>
+   ```
+
+Get the current value from the backend team / secret manager. Never commit it —
+`local.properties` is gitignored for this reason. If the value ever lands in
+git history it must be rotated on the backend (and in the iOS app, which
+shares the same secret).
+
+## 6. (Later) Things to install before Phase 11
 
 These aren't needed for Phase 0 but will be required as features land:
 
@@ -71,7 +90,7 @@ These aren't needed for Phase 0 but will be required as features land:
   `local.properties` as `placesApiKey=…` and reference from manifest.
 - **Release keystore** — generate before first release. See [docs/08-testing-build/04-release.md](docs/08-testing-build/04-release.md).
 
-## 6. Verifying the scaffolding
+## 7. Verifying the scaffolding
 
 The first build should:
 - Resolve all dependencies (no red text in Gradle sync)
