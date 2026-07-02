@@ -18,6 +18,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.content.TextContent
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.AttributeKey
@@ -96,7 +97,8 @@ class ApiClient(
  * core/data calls this with the right DI inputs.
  *
  * Retries 502/503/504 and transient IO errors up to two times with a 2s ×
- * attempt linear backoff (matches iOS APIClient retry policy).
+ * attempt linear backoff — GET requests only, so a lost response can never
+ * duplicate a non-idempotent write (order/bid creation).
  */
 fun buildHttpClient(
     clientId: String,
@@ -139,8 +141,15 @@ fun buildHttpClient(
 
     install(HttpRequestRetry) {
         maxRetries = 2
-        retryIf { _, response -> response.status.value in setOf(502, 503, 504) }
-        retryOnExceptionIf { _, cause -> cause is IOException }
+        // Only GET is safe to replay. A POST that dies with a timeout or a
+        // gateway 502/503/504 may have already been processed by the app
+        // server — re-sending it would duplicate an order or bid.
+        retryIf { request, response ->
+            request.method == HttpMethod.Get && response.status.value in setOf(502, 503, 504)
+        }
+        retryOnExceptionIf { request, cause ->
+            request.method == HttpMethod.Get && cause is IOException
+        }
         delayMillis(respectRetryAfterHeader = true) { attempt -> 2_000L * attempt }
     }
 
