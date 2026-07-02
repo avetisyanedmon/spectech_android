@@ -3,6 +3,7 @@ package com.spectech.features.profile.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spectech.data.auth.SessionStore
+import com.spectech.data.notifications.NotificationStore
 import com.spectech.data.profile.ProfileStore
 import com.spectech.data.push.PushRepository
 import com.spectech.data.savedfilter.SavedFilterStore
@@ -23,6 +24,7 @@ class ProfileViewModel @Inject constructor(
     private val profileStore: ProfileStore,
     private val pushRepository: PushRepository,
     private val savedFilterStore: SavedFilterStore,
+    private val notificationStore: NotificationStore,
 ) : ViewModel() {
 
     val sessionFlow = sessionStore.currentSession
@@ -55,19 +57,24 @@ class ProfileViewModel @Inject constructor(
     }
 
     /**
-     * Signs the user out. The push token forget is best-effort and runs
-     * before the session is cleared so the bearer is still present for any
-     * future server-side unregister call we might add. The session clear
-     * triggers the SpecTechApplication push-registration collector, which
-     * also calls `pushRepository.forget()` — that's idempotent.
+     * Signs the user out. The server-side push unregister is best-effort and
+     * MUST run before the session is cleared — it needs the bearer token, and
+     * skipping it would leave this device receiving the old account's
+     * notifications. The session clear then triggers the SpecTechApplication
+     * push-registration collector, which calls `pushRepository.forget()` —
+     * that's idempotent with the unregister.
      */
     fun logout() {
         viewModelScope.launch {
-            pushRepository.forget()
+            pushRepository.unregisterLastToken()
             // Drop the local saved-filter mirror so the next user that signs
             // in on this device doesn't see the previous account's picks
             // while [SavedFilterStore.loadFromServer] catches up.
             savedFilterStore.forgetLocal()
+            // The persisted in-app inbox belongs to the account, not the
+            // device — wipe it so the next sign-in doesn't see the previous
+            // user's bid/order notifications.
+            notificationStore.clear()
             sessionStore.clearSession()
             profileStore.clear()
         }

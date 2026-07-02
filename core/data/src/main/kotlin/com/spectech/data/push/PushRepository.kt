@@ -53,6 +53,18 @@ class PushRepository @Inject constructor(
         }
     }
 
+    /**
+     * Best-effort server-side unregister of the last token this process
+     * registered. Must run BEFORE the session is cleared — the endpoint needs
+     * the bearer token — so the backend stops routing this account's pushes
+     * to the device after sign-out. Failures are logged and swallowed inside
+     * [unregisterToken]; logout must never be blocked by a network error.
+     */
+    suspend fun unregisterLastToken() {
+        val token = lastRegisteredToken ?: return
+        unregisterToken(token)
+    }
+
     /** Forgets the in-memory register state, so the next sign-in re-registers. */
     fun forget() {
         lastRegisteredToken = null
