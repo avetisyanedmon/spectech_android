@@ -10,7 +10,8 @@
 
     <style name="Theme.SpecTech.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/brand_blue_dark</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!-- Transparent icon, same as values/themes.xml. -->
+        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.SpecTech</item>
     </style>
 </resources>

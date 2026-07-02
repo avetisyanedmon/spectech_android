@@ -19,7 +19,13 @@
     -->
     <style name="Theme.SpecTech.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/brand_blue</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!--
+            Transparent icon: the Android 12+ system splash only supports a
+            color + centered icon, so instead of showing the launcher icon we
+            show nothing and let the full-bleed launch artwork take over on
+            the first frame.
+        -->
+        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.SpecTech</item>
     </style>
 </resources>

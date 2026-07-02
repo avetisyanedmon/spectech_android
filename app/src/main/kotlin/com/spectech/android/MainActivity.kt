@@ -42,9 +42,11 @@ class MainActivity : ComponentActivity() {
     ) { /* result handled silently — push still works if denied, the OS just hides the tray notif */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splash = installSplashScreen()
+        // Dismiss the system splash on the first Compose frame so the
+        // full-bleed launch artwork in [LaunchSplashView] is what the user
+        // sees while the session restore is in flight (matches iOS).
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        splash.setKeepOnScreenCondition { sessionStore.isRestoring.value }
         enableEdgeToEdge()
 
         setContent {
