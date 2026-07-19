@@ -11,27 +11,26 @@ import com.spectech.domain.enums.PaymentType
 import com.spectech.domain.enums.PricingUnit
 import com.spectech.domain.error.ApiError
 import com.spectech.domain.model.CreateOrderRequest
+import com.spectech.domain.util.OrderSchedule
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 /**
  * Drives the Create Order sheet. Mirrors iOS `CreateOrderViewModel`
  * (SpecTechIOS/Features/CreateOrder/CreateOrderView.swift) — including
- * cross-field validation (work start no later than the bid-acceptance
- * time), the "Параметры техники: …"
+ * cross-field validation (the bid-acceptance deadline may not be later than
+ * the work start), the "Параметры техники: …"
  * options-summary prefix on `description`, and comma-or-dot decimal handling
  * on `workVolume`. The standalone "duration" control has been removed.
  *
@@ -65,14 +64,14 @@ class CreateOrderViewModel @Inject constructor(
     // ─── Scheduling — local time zone semantics ────────────────────────────
 
     /**
-     * Defaults to "now" (today at the current local time). The work-start
-     * time is constrained only by the bidding deadline: it must be no later
-     * than the bid-acceptance end time.
+     * Defaults to "now" (today at the current local time). Bids must close
+     * before work begins, so the bid-acceptance deadline may not be later
+     * than the work start.
      */
     var startDate by mutableStateOf(defaultStartDate())
     var startTime by mutableStateOf(defaultStartTime())
 
-    /** Auto-tracks `start + 1h` whenever start changes, but the user can override. */
+    /** Auto-tracks `start − 1h` whenever start changes, but the user can override. */
     var biddingDeadline by mutableStateOf(defaultBiddingDeadline())
         private set
     private var biddingDeadlineManuallyEdited: Boolean = false
@@ -109,16 +108,13 @@ class CreateOrderViewModel @Inject constructor(
         private set
 
     /**
-     * Real-time validation: true when the work start is later than the
-     * bid-acceptance end time (the bidding deadline) — the only scheduling
-     * constraint. The UI resolves the localized error message.
+     * Real-time validation: true when the bid-acceptance end time (the
+     * bidding deadline) is later than the work start — bids must close no
+     * later than the moment work begins. The UI resolves the localized
+     * error message.
      */
-    val isStartAfterBiddingDeadline: Boolean
-        get() {
-            val tz = TimeZone.currentSystemDefault()
-            val startInstant = startDate.atTime(startTime).toInstant(tz)
-            return startInstant > biddingDeadline.toInstant(tz)
-        }
+    val isDeadlineAfterStart: Boolean
+        get() = OrderSchedule.isDeadlineAfterStart(startDate, startTime, biddingDeadline)
 
     /**
      * Submit-enabled gate. Matches iOS `canSubmit` (CreateOrderView.swift:203-209):
@@ -130,7 +126,7 @@ class CreateOrderViewModel @Inject constructor(
                 city.isNotBlank() &&
                 workVolume.isNotBlank() &&
                 parseVolume(workVolume) != null &&
-                !isStartAfterBiddingDeadline
+                !isDeadlineAfterStart
 
     fun submit() {
         if (isSubmitting) return
@@ -161,12 +157,12 @@ class CreateOrderViewModel @Inject constructor(
             )
             return
         }
-        // Work-start time validation: start must not be later than the
-        // bid-acceptance time (deadline).
-        if (isStartAfterBiddingDeadline) {
+        // Scheduling validation: the bid-acceptance deadline must not be
+        // later than the work start.
+        if (isDeadlineAfterStart) {
             error = ApiError(
                 code = ApiError.LocalCodes.FALLBACK_400,
-                message = "Work start time cannot be later than the bid acceptance time.",
+                message = "Bid acceptance must end no later than the work start.",
             )
             return
         }
@@ -280,18 +276,8 @@ class CreateOrderViewModel @Inject constructor(
         private fun defaultBiddingDeadline(): LocalDateTime =
             autoDeadlineFor(defaultStartDate(), defaultStartTime())
 
-        /**
-         * Bidding deadline auto-tracks `start + 1h`. Since the work-start time
-         * is constrained to be no later than the deadline, the deadline will
-         * always sit at or after the start time.
-         */
-        private fun autoDeadlineFor(date: LocalDate, time: LocalTime): LocalDateTime {
-            val tz = TimeZone.currentSystemDefault()
-            val startInstant = date.atTime(time).toInstant(tz)
-            val auto = startInstant.plus(1, DateTimeUnit.HOUR, tz)
-            val now = Clock.System.now()
-            val target = if (auto < now) now else auto
-            return target.toLocalDateTime(tz)
-        }
+        /** Bidding deadline auto-tracks `start − 1h`; see [OrderSchedule.autoDeadlineFor]. */
+        private fun autoDeadlineFor(date: LocalDate, time: LocalTime): LocalDateTime =
+            OrderSchedule.autoDeadlineFor(date, time)
     }
 }

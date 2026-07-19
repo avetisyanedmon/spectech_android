@@ -26,7 +26,7 @@
     <string name="create_order_start_time">Start time</string>
     <string name="create_order_bidding_deadline">Bidding deadline</string>
     <string name="create_order_description">Describe the job (optional)</string>
-    <string name="create_order_error_start_after_deadline">Work start time cannot be later than the bid acceptance time.</string>
+    <string name="create_order_error_deadline_after_start">Bid acceptance must end no later than the work start.</string>
 
     <!-- Picker labels used by date/time helpers -->
     <string name="create_order_date">Date</string>

@@ -200,16 +200,16 @@ private fun CreateOrderForm(viewModel: CreateOrderViewModel, onClose: () -> Unit
                     label = stringResource(R.string.create_order_start_time),
                     value = viewModel.startTime,
                     onValueChange = { viewModel.updateStartTime(it) },
-                    error = if (viewModel.isStartAfterBiddingDeadline) {
-                        stringResource(R.string.create_order_error_start_after_deadline)
-                    } else {
-                        null
-                    },
                 )
                 DateTimeField(
                     label = stringResource(R.string.create_order_bidding_deadline),
                     value = viewModel.biddingDeadline,
                     onValueChange = { viewModel.updateBiddingDeadline(it) },
+                    error = if (viewModel.isDeadlineAfterStart) {
+                        stringResource(R.string.create_order_error_deadline_after_start)
+                    } else {
+                        null
+                    },
                 )
             }
 

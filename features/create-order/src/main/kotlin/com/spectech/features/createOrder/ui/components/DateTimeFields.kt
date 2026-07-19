@@ -174,6 +174,7 @@ fun DateTimeField(
     value: LocalDateTime,
     onValueChange: (LocalDateTime) -> Unit,
     modifier: Modifier = Modifier,
+    error: String? = null,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(label, style = MaterialTheme.typography.titleSmall)
@@ -186,6 +187,7 @@ fun DateTimeField(
             label = stringResource(R.string.create_order_time),
             value = value.time,
             onValueChange = { onValueChange(LocalDateTime(value.date, it)) },
+            error = error,
         )
     }
 }
